@@ -1,6 +1,14 @@
 # Table of Contents
 
 - [Reference Links](#Reference)
+- [Tech Stack](#TechStack)
+- [Project Summary](#ProjectSummary)
+- [/Endpoints (For Frontend Usage)](#FrontEnd)
+  - [Auth](#Auth)articles
+  - [Articles](#Articles)
+  - [Users](#Users)
+- [Table Schema](#TableSchema)
+- [Project Scores 1/2/3](#Rubrics)
 
 # Reference Links <a name="Reference"></a>
 
@@ -9,7 +17,7 @@
 - [Rubric](https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3rAGQ/edit#gid=0) (Also see "Project Scores 1/2/3" below)
 - [List of Projects](https://lambdaschool.monday.com/boards/165411499/)
 
-# Tech Stack <a name="TechStack">
+# Tech Stack <a name="TechStack"></a>
 
 - git - Command line tool used for version control.
 - github - Webhosting site for containing repositories and supporting git commands.
@@ -23,11 +31,11 @@
 - knex - Handles Migration Tables, Seeds, Creates database file through client, provides query methods for server endpoints.
 - sqlite3 - Generates Local Database File.
 
-# Project Summary
+# Project Summary <a name="ProjectSummary"></a>
 
 As a researcher, it's difficult to keep track of articles you want to read later. Pintereach helps you research by enabling you to save and organize articles in to categories to read later.
 
-# /Endpoints (For Frontend Usage)
+# /Endpoints (For Frontend Usage) <a name="FrontEnd"></a>
 
 ## Global CRUD Rules
 
@@ -39,7 +47,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 ---
 
-> /auth
+> /auth <a name="Auth"></a>
 
 - POST `/auth/register`
 
@@ -95,7 +103,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-> /articles
+> /articles <a name="Articles"></a>
 
 - GET `/articles` Requires AUTHORIZATION
 
@@ -107,7 +115,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/articles', headersObj)
+  axios.get('https://(api-web-address)/articles', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -122,7 +130,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       id: 1,
       coverPage: "HelloWorld.png",
       title: "Hello World",
-      link: "http://helloworld.com/"
+      link: "https://helloworld.com/"
     },
     {
       id: 2,
@@ -149,7 +157,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get(`http://(api-web-address)/articles/${2}`, headersObj)
+  axios.get(`https://(api-web-address)/articles/${2}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -179,7 +187,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/articles/${3}/users', headersObj)
+  axios.get('https://(api-web-address)/articles/${3}/users', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -218,7 +226,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/articles/users/', headersObj)
+  axios.get('https://(api-web-address)/articles/users/', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -233,7 +241,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       article1: {
         coverPage: "HelloWorld.png",
         title: "Hello World",
-        link: "http://helloworld.com/",
+        link: "https://helloworld.com/",
         users: {
           jamespage: {
             id: 1,
@@ -297,7 +305,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   }
 
-  axios.post(`http://(api-web-address)/articles`, headersObj)
+  axios.post(`https://(api-web-address)/articles`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -329,11 +337,11 @@ As a researcher, it's difficult to keep track of articles you want to read later
     body: {
       coverPage: "CoverLetter.doc",
       title: "New Article",
-      link: "http://newarticle.com/"
+      link: "https://newarticle.com/"
     }
   }
 
-  axios.post(`http://(api-web-address)/articles/${4}`, headersObj)
+  axios.post(`https://(api-web-address)/articles/${4}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -348,7 +356,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       id: 4,
       coverPage: "CoverLetter.doc",
       title: "New Article",
-      link: "http://newarticle.com/"
+      link: "https://newarticle.com/"
     }
   ]
   ```
@@ -363,7 +371,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.post(`http://(api-web-address)/articles/${4}`, headersObj)
+  axios.post(`https://(api-web-address)/articles/${4}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -378,12 +386,12 @@ As a researcher, it's difficult to keep track of articles you want to read later
       id: 4,
       coverPage: "CoverLetter.doc",
       title: "New Article",
-      link: "http://newarticle.com/"
+      link: "https://newarticle.com/"
     }
   ]
   ```
 
-> /users
+> /users <a name="Users"></a>
 
 - GET `/users` Requires AUTHORIZATION
 
@@ -395,7 +403,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/users', headersObj)
+  axios.get('https://(api-web-address)/users', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -420,7 +428,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       displayName: "", // optional
       password: "cats1", // required
       email: "", // (Unique) optional
-      imgUrl:   "http://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg" // optional
+      imgUrl:   "https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg" // optional
     },
     {
       id: 3,
@@ -443,7 +451,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/users/${2}', headersObj)
+  axios.get('https://(api-web-address)/users/${2}', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -460,7 +468,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       displayName: "", // optional
       password: "cats1", // required
       email: "", // (Unique) optional
-      imgUrl:   "http://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg" // optional
+      imgUrl:   "https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg" // optional
     }
   ]
   ```
@@ -475,7 +483,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/users/${2}/articles', headersObj)
+  axios.get('https://(api-web-address)/users/${2}/articles', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -494,7 +502,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
           article1: {
             coverPage: "HelloWorld.png",
             title: "Hello World",
-            link: "http://helloworld.com/"
+            link: "https://helloworld.com/"
           },
           article3: {
             coverPage: "index.html",
@@ -517,7 +525,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.get('http://(api-web-address)/users/${2}/articles/${1}', headersObj)
+  axios.get('https://(api-web-address)/users/${2}/articles/${1}', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -535,7 +543,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
         article1: {
           coverPage: "HelloWorld.png",
           title: "Hello World",
-          link: "http://helloworld.com/"
+          link: "https://helloworld.com/"
         }
       }
     }
@@ -557,7 +565,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.get('http://(api-web-address)/users/${2}', headersObj)
+  axios.get('https://(api-web-address)/users/${2}', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -575,7 +583,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.get('http://(api-web-address)/users/${2}', headersObj)
+  axios.get('https://(api-web-address)/users/${2}', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -603,7 +611,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     password: "$his1sMuchBtter643"
   };
 
-  axios.delete('http://(api-web-address)/users/${2}', headersObj)
+  axios.delete('https://(api-web-address)/users/${2}', headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -620,7 +628,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-# Table Schema ()
+# Table Schema <a name="TableSchema"></a>
 
 ## users
 
@@ -649,7 +657,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 | user_id    | Int (required)       |
 | article_id | Int (required)       |
 
-# Project Scores 1/2/3
+# Project Scores 1/2/3 <a name="Rubrics"></a>
 
 https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3rAGQ/edit#gid=0
 
