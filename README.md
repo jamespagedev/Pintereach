@@ -1,15 +1,15 @@
 # Table of Contents
 
-- [comment](#Reference)
+- [Reference Links](#Reference)
 
-# Reference Links
+# Reference Links <a name="Reference"></a>
 
 - [policies and procedures](https://www.notion.so/Policies-and-Procedures-19e679fc1a284b668d8132dd8d7228cd)
 - [Checklist](https://www.notion.so/Build-week-Schedule-and-Daily-Milestones-7f0aca2ad598459fa4492fdac9881d5b)
 - [Rubric](https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3rAGQ/edit#gid=0) (Also see "Project Scores 1/2/3" below)
 - [List of Projects](https://lambdaschool.monday.com/boards/165411499/)
 
-# Tech Stack
+# Tech Stack <a name="TechStack">
 
 - git - Command line tool used for version control.
 - github - Webhosting site for containing repositories and supporting git commands.
