@@ -54,13 +54,19 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  {
+  const newUser = {
     username: "jamespage", // (Unique) required
     displayName: "RandomBlogger", // optional
     password: "pass123", // required
     email: "jp@email.com", // (Unique) optional
     imgUrl: "https://i.imgur.com/mACq7e7.jpg" // optional
   }
+
+  axios.post('https://(api-web-address)/articles', newUser)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example: Returned
@@ -79,10 +85,16 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  {
+  const creds = {
     username: "jamespage", // required
     password: "pass123" // required
   }
+
+    axios.post('https://(api-web-address)/articles', creds)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example: Returned
@@ -94,7 +106,6 @@ As a researcher, it's difficult to keep track of articles you want to read later
         id: 1,
         username: "jamespage",
         displayName: "James Page",
-        password: "pass123",
         email: "jp@email.com",
         imgUrl: "https://i.imgur.com/mACq7e7.jpg"
       },
@@ -105,17 +116,13 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 > /articles <a name="ArticlesEnd"></a>
 
-- GET `/articles` Requires AUTHORIZATION
+- GET `/articles`
 
   - Explanation: returns all articles
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/articles', headersObj)
+  axios.get('https://(api-web-address)/articles')
     .then(response => {
       console.log(response.data)
     })
@@ -147,17 +154,13 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- GET `/articles/:id` Requires AUTHORIZATION
+- GET `/articles/:id`
 
   - Explanation: returns single article
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get(`https://(api-web-address)/articles/${2}`, headersObj)
+  axios.get(`https://(api-web-address)/articles/${2}`)
     .then(response => {
       console.log(response.data)
     })
@@ -177,17 +180,13 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- GET `/articles/:id/users` Requires AUTHORIZATION
+- GET `/articles/:id/users`
 
   - Explanation: returns article with list of users
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/articles/${3}/users', headersObj)
+  axios.get(`https://(api-web-address)/articles/${3}/users`)
     .then(response => {
       console.log(response.data)
     })
@@ -199,6 +198,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     article3: {
+      id: 3,
       coverPage: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
@@ -216,17 +216,13 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- GET `/articles/users` Requires AUTHORIZATION
+- GET `/articles/users`
 
   - Explanation: returns list of articles and list of users for each article
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/articles/users/', headersObj)
+  axios.get('https://(api-web-address)/articles/users/')
     .then(response => {
       console.log(response.data)
     })
@@ -239,6 +235,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       article1: {
+        id: 1,
         coverPage: "HelloWorld.png",
         title: "Hello World",
         link: "https://helloworld.com/",
@@ -259,6 +256,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       },
 
       article2: {
+        id: 2,
         coverPage: "Front.txt",
         title: "Random Article",
         link: "",
@@ -271,6 +269,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       },
 
       article3: {
+        id: 3,
         coverPage: "index.html",
         title: "",
         link: "https://lambdaschool.com/",
@@ -341,7 +340,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   }
 
-  axios.post(`https://(api-web-address)/articles/${4}`, headersObj)
+  axios.put(`https://(api-web-address)/articles/${4}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -371,7 +370,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.post(`https://(api-web-address)/articles/${4}`, headersObj)
+  axios.delete(`https://(api-web-address)/articles/${4}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -383,27 +382,20 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     {
-      id: 4,
-      coverPage: "CoverLetter.doc",
-      title: "New Article",
-      link: "https://newarticle.com/"
+      count: 1
     }
   ]
   ```
 
 > /users <a name="UsersEnd"></a>
 
-- GET `/users` Requires AUTHORIZATION
+- GET `/users`
 
   - Explanation: returns all users
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/users', headersObj)
+  axios.get('https://(api-web-address)/users')
     .then(response => {
       console.log(response.data)
     })
@@ -416,42 +408,26 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
-      username: "jamespage", // (Unique) required
-      displayName: "RandomBlogger", // optional
-      password: "pass123", // required
-      email: "jp@email.com", // (Unique) optional
-      imgUrl: "https://i.imgur.com/mACq7e7.jpg" // optional
+      displayName: "RandomBlogger" // displayName value will be username if display name is empty
     },
     {
       id: 2,
-      username: "catperson", // (Unique) required
-      displayName: "", // optional
-      password: "cats1", // required
-      email: "", // (Unique) optional
-      imgUrl:   "https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg" // optional
+      displayName: "catperson" // displayName value will be username if display name is empty
     },
     {
       id: 3,
-      username: "reader", // (Unique) required
-      displayName: "", // optional
-      password: "pass123", // required
-      email: "gospamyourself@email.com", // (Unique) optional
-      imgUrl: "" // optional
+      displayName: "reader" // displayName value will be username if display name is empty
     }
   ]
   ```
 
-- GET `/users/:id` Requires AUTHORIZATION
+- GET `/users/:id`
 
   - Explanation: returns single user
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/users/${2}', headersObj)
+  axios.get(`https://(api-web-address)/users/${2}`)
     .then(response => {
       console.log(response.data)
     })
@@ -464,26 +440,24 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 2,
-      username: "catperson", // (Unique) required
-      displayName: "", // optional
-      password: "cats1", // required
-      email: "", // (Unique) optional
-      imgUrl:   "https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg" // optional
+      displayName: "catperson", // displayName value will be username if display name is empty
     }
   ]
   ```
 
-- GET `/users/:id/articles` Requires AUTHORIZATION
+- GET `/users/articles`
+
+```
+Fill in later
+```
+
+- GET `/users/:id/articles`
 
   - Explanation: Returns a single user with all articles
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/users/${2}/articles', headersObj)
+  axios.get(`https://(api-web-address)/users/${2}/articles`)
     .then(response => {
       console.log(response.data)
     })
@@ -500,11 +474,13 @@ As a researcher, it's difficult to keep track of articles you want to read later
         displayName: "catperson",
         articles: {
           article1: {
+            id: 1,
             coverPage: "HelloWorld.png",
             title: "Hello World",
             link: "https://helloworld.com/"
           },
           article3: {
+            id: 3,
             coverPage: "index.html",
             title: "",
             link: "https://lambdaschool.com/"
@@ -515,17 +491,13 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- GET `/users/:userId/articles/:articleId` Requires AUTHORIZATION
+- GET `/users/:userId/articles/:articleId`
 
   - Explanation: Returns a single user with a sincle article
   - Example: Send
 
   ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://(api-web-address)/users/${2}/articles/${1}', headersObj)
+  axios.get(`https://(api-web-address)/users/${2}/articles/${1}`)
     .then(response => {
       console.log(response.data)
     })
@@ -541,6 +513,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
         id: 2,
         displayName: "catperson",
         article1: {
+          id: 1,
           coverPage: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/"
@@ -550,7 +523,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- PUT `/users/:id` Requires AUTHORIZATION
+- PUT `/users/:id/articles` Requires AUTHORIZATION
 
   - Explanation: edit a user key/value pairs (including password)
   - Example1: Send
@@ -565,7 +538,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.get('https://(api-web-address)/users/${2}', headersObj)
+  axios.put(`https://(api-web-address)/users/${2}/articles`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -583,7 +556,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.get('https://(api-web-address)/users/${2}', headersObj)
+  axios.put(`https://(api-web-address)/users/${2}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -611,7 +584,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     password: "$his1sMuchBtter643"
   };
 
-  axios.delete('https://(api-web-address)/users/${2}', headersObj)
+  axios.delete(`https://(api-web-address)/users/${2}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
