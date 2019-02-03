@@ -1,5 +1,7 @@
 # Table of Contents
 
+- [comment](#Reference)
+
 # Reference Links
 
 - [policies and procedures](https://www.notion.so/Policies-and-Procedures-19e679fc1a284b668d8132dd8d7228cd)
@@ -118,16 +120,19 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
+      coverPage: "HelloWorld.png",
       title: "Hello World",
       link: "http://helloworld.com/"
     },
     {
       id: 2,
+      coverPage: "Front.txt",
       title: "Random Article",
       link: ""
     },
     {
       id: 3,
+      coverPage: "index.html",
       title: "",
       link: "https://lambdaschool.com/"
     }
@@ -157,6 +162,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 2,
+      coverPage: "Front.txt",
       title: "Random Article",
       link: ""
     }
@@ -185,6 +191,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     article3: {
+      coverPage: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
       users: {
@@ -244,6 +251,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       },
 
       article2: {
+        coverPage: "Front.txt",
         title: "Random Article",
         link: "",
         users: {
@@ -255,6 +263,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       },
 
       article3: {
+        coverPage: "index.html",
         title: "",
         link: "https://lambdaschool.com/",
         users: {
@@ -318,6 +327,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   headerObj = {
     headers: { authorization: token },
     body: {
+      coverPage: "CoverLetter.doc",
       title: "New Article",
       link: "http://newarticle.com/"
     }
@@ -534,7 +544,81 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 - PUT `/users/:id` Requires AUTHORIZATION
 
+  - Explanation: edit a user key/value pairs (including password)
+  - Example1: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    body: {
+      username: "catperson",
+      oldpassword: "cats1",
+      newpassword: "$his1sMuchBtter643"
+    }
+  };
+
+  axios.get('http://(api-web-address)/users/${2}', headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - Example2: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    body: {
+      username: "catperson",
+      email: "kitty@email.com"
+    }
+  };
+
+  axios.get('http://(api-web-address)/users/${2}', headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+  [
+    {
+      id: 2
+    }
+  ]
+  ```
+
 - DELETE `/users/:id` Requires AUTHORIZATION
+
+  - Explanation: remove a user from the database
+  - Example1: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    password: "$his1sMuchBtter643"
+  };
+
+  axios.delete('http://(api-web-address)/users/${2}', headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+  [
+    {
+      count: 2
+    }
+  ]
+  ```
 
 # Table Schema ()
 
@@ -550,11 +634,12 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 ## articles
 
-| Field | Data Type (requires at **LEAST** title **OR** link) |
-| ----- | --------------------------------------------------- |
-| id    | Int (auto increment)                                |
-| title | String (optional1)                                  |
-| link  | String (optional2)                                  |
+| Field        | Data Type (requires at **LEAST** title **OR** link) |
+| ------------ | --------------------------------------------------- |
+| id           | Int (auto increment)                                |
+| cover_letter | String (optional1)                                  |
+| title        | String (optional1)                                  |
+| link         | String (optional2)                                  |
 
 ## users_articles_relationship
 
