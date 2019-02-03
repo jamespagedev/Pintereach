@@ -4,9 +4,9 @@
 - [Tech Stack](#TechStack)
 - [Project Summary](#ProjectSummary)
 - [/Endpoints (For Frontend Usage)](#FrontEnd)
-  - [Auth](#Auth)
-  - [Articles](#Articles)
-  - [Users](#Users)
+  - [Auth](#AuthEnd)
+  - [Articles](#ArticlesEnd)
+  - [Users](#UsersEnd)
 - [Table Schema](#TableSchema)
 - [Project Scores 1/2/3](#Rubrics)
 
@@ -47,7 +47,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 ---
 
-> /auth <a name="Auth"></a>
+> /auth <a name="AuthEnd"></a>
 
 - POST `/auth/register`
 
@@ -103,7 +103,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-> /articles <a name="Articles"></a>
+> /articles <a name="ArticlesEnd"></a>
 
 - GET `/articles` Requires AUTHORIZATION
 
@@ -391,7 +391,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-> /users <a name="Users"></a>
+> /users <a name="UsersEnd"></a>
 
 - GET `/users` Requires AUTHORIZATION
 
