@@ -197,21 +197,21 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   [
-    article3: {
+    {
       id: 3,
       coverPage: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
-      users: {
-        jamespage: {
+      users: [
+        {
           id: 1,
-          displayName: "RandomBlogger", // will use username if displayName is   blank
+          displayName: "RandomBlogger", // will use username if displayName is blank
         },
-        catperson: {
+        {
           id: 2,
           displayName: "catperson", // will use username if displayName is blank
         }
-      }
+      ]
     }
   ]
   ```
@@ -234,56 +234,52 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     {
-      article1: {
-        id: 1,
-        coverPage: "HelloWorld.png",
-        title: "Hello World",
-        link: "https://helloworld.com/",
-        users: {
-          jamespage: {
-            id: 1,
-            displayName: "RandomBlogger", // will use username if displayName is   blank
-          },
-          catperson: {
-            id: 2,
-            displayName: "catperson", // will use username if displayName is   blank
-          },
-          reader: {
-            id: 3,
-            displayName: "reader" // will use username if displayName is blank
-          }
+      id: 1,
+      coverPage: "HelloWorld.png",
+      title: "Hello World",
+      link: "https://helloworld.com/",
+      users: [
+        {
+          id: 1,
+          displayName: "RandomBlogger", // will use username if displayName is   blank
+        },
+        {
+          id: 2,
+          displayName: "catperson", // will use username if displayName is   blank
+        },
+        {
+          id: 3,
+          displayName: "reader" // will use username if displayName is blank
         }
-      },
-
-      article2: {
-        id: 2,
-        coverPage: "Front.txt",
-        title: "Random Article",
-        link: "",
-        users: {
-          reader: {
-            id: 3,
-            displayName: "reader" // will use username if displayName is blank
-          }
+      ]
+    },
+    {
+      id: 2,
+      coverPage: "Front.txt",
+      title: "Random Article",
+      link: "",
+      users: [
+        {
+          id: 3,
+          displayName: "reader" // will use username if displayName is blank
         }
-      },
-
-      article3: {
-        id: 3,
-        coverPage: "index.html",
-        title: "",
-        link: "https://lambdaschool.com/",
-        users: {
-          jamespage: {
-            id: 1,
-            displayName: "RandomBlogger", // will use username if displayName is   blank
-          },
-          catperson: {
-            id: 2,
-            displayName: "catperson", // will use username if displayName is   blank
-          }
+      ]
+    },
+    {
+      id: 3,
+      coverPage: "index.html",
+      title: "",
+      link: "https://lambdaschool.com/",
+      users: [
+        {
+          id: 1,
+          displayName: "RandomBlogger", // will use username if displayName is   blank
+        },
+        {
+          id: 2,
+          displayName: "catperson", // will use username if displayName is   blank
         }
-      }
+      ]
     }
   ]
   ```
@@ -324,9 +320,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- PUT `/articles/:id` Requires AUTHORIZATION
+- (needs discussion): PUT `/articles/:id` Requires AUTHORIZATION
 
   - Explanation: Edit an article
+  - Rule: May only edit the article if all users are allowing this (some boolean setting?? What should the default be??), or... if no other users currently have this article on their board
   - Example: Send
 
   ```
@@ -363,6 +360,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 - DELETE `/articles/:id` Requires AUTHORIZATION
 
   - Explanation: Delete an article
+  - Rule: Aricle can only be deleted if no users are using it on their boards
   - Example: Send
 
   ```
@@ -382,7 +380,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     {
-      count: 1
+      message: "success" // or "fail(with reason)"
     }
   ]
   ```
@@ -424,10 +422,11 @@ As a researcher, it's difficult to keep track of articles you want to read later
 - GET `/users/:id`
 
   - Explanation: returns single user
+  - Rule: Only able to view user attributes if they belong to user logged in
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/users/${2}`)
+  axios.get(`https://(api-web-address)/users/${1}`)
     .then(response => {
       console.log(response.data)
     })
@@ -439,17 +438,88 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     {
-      id: 2,
-      displayName: "catperson", // displayName value will be username if display name is empty
+      id: 1,
+      username: "jamespage",
+      displayName: "RandomBlogger",
+      email: "jp@email.com",
+      imgUrl: "https://i.imgur.com/mACq7e7.jpg"
     }
   ]
   ```
 
 - GET `/users/articles`
 
-```
-Fill in later
-```
+  - Explanation: Returns a list of all users with all their articles
+  - Example: Send
+
+  ```
+  axios.get(`https://(api-web-address)/users/articles`)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+  [
+    {
+      id: 1,
+      displayName: "RandomBlogger", // will use username if displayName is   blank
+      articles: [
+        {
+          id: 1,
+          coverPage: "HelloWorld.png",
+          title: "Hello World",
+          link: "https://helloworld.com/",
+        },
+        {
+          id: 3,
+          coverPage: "index.html",
+          title: "",
+          link: "https://lambdaschool.com/",
+        }
+      ]
+    },
+    {
+      id: 2,
+      displayName: "catperson", // will use username if displayName is   blank
+      articles: [
+        {
+          id: 1,
+          coverPage: "HelloWorld.png",
+          title: "Hello World",
+          link: "https://helloworld.com/",
+        },
+        {
+          id: 2,
+          coverPage: "Front.txt",
+          title: "Random Article",
+          link: "",
+        }
+      ]
+    },
+    {
+      id: 3,
+      displayName: "reader" // will use username if displayName is blank
+      articles: [
+        {
+          id: 1,
+          coverPage: "HelloWorld.png",
+          title: "Hello World",
+          link: "https://helloworld.com/",
+        },
+        {
+          id: 3,
+          coverPage: "index.html",
+          title: "",
+          link: "https://lambdaschool.com/",
+        }
+      ]
+    }
+  ]
+  ```
 
 - GET `/users/:id/articles`
 
@@ -469,24 +539,22 @@ Fill in later
   ```
   [
     {
-      catperson: {
-        id: 2,
-        displayName: "catperson",
-        articles: {
-          article1: {
-            id: 1,
-            coverPage: "HelloWorld.png",
-            title: "Hello World",
-            link: "https://helloworld.com/"
-          },
-          article3: {
-            id: 3,
-            coverPage: "index.html",
-            title: "",
-            link: "https://lambdaschool.com/"
-          }
+      id: 2,
+      displayName: "catperson",
+      articles: [
+        {
+          id: 1,
+          coverPage: "HelloWorld.png",
+          title: "Hello World",
+          link: "https://helloworld.com/"
+        },
+        {
+          id: 3,
+          coverPage: "index.html",
+          title: "",
+          link: "https://lambdaschool.com/"
         }
-      }
+      ]
     }
   ]
   ```
@@ -509,32 +577,55 @@ Fill in later
   ```
   [
     {
-      catperson: {
-        id: 2,
-        displayName: "catperson",
-        article1: {
-          id: 1,
-          coverPage: "HelloWorld.png",
-          title: "Hello World",
-          link: "https://helloworld.com/"
-        }
+      id: 2,
+      displayName: "catperson",
+      article: {
+        id: 1,
+        coverPage: "HelloWorld.png",
+        title: "Hello World",
+        link: "https://helloworld.com/"
       }
     }
   ]
   ```
 
-- PUT `/users/:id/articles` Requires AUTHORIZATION
+- Post `/users/articles` Requires AUTHORIZATION
 
-  - Explanation: edit a user key/value pairs (including password)
+  - Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
+  - Note: Can only post articles on your own user boards... not other use boards
   - Example1: Send
 
   ```
   const headersObj = {
     headers: { authorization: token },
     body: {
-      username: "catperson",
-      oldpassword: "cats1",
-      newpassword: "$his1sMuchBtter643"
+      articlesIds: [1, 3]
+        }
+      ]
+    }
+  };
+
+  axios.post(`https://(api-web-address)/users/articles`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+- PUT `/users` Requires AUTHORIZATION
+
+  - Explanation: edit a user key/value pairs (including password)
+  - Note: Can only change the user attributes of your own user (not other users)
+  - Example1: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    body: {
+      username: "catperson", // required (username cannot be changed)
+      // Note: If changing the password, you must provide both the old and new password
+      oldpassword: "cats1", // optional
+      newpassword: "$his1sMuchBtter643" // optional
     }
   };
 
@@ -556,7 +647,7 @@ Fill in later
     }
   };
 
-  axios.put(`https://(api-web-address)/users/${2}`, headersObj)
+  axios.put(`https://(api-web-address)/users`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -573,18 +664,21 @@ Fill in later
   ]
   ```
 
-- DELETE `/users/:id` Requires AUTHORIZATION
+- DELETE `/users` Requires AUTHORIZATION
 
-  - Explanation: remove a user from the database
+  - Explanation: remove your own user account from the database
+  - Note: Can only delete your own user account (not other user accounts)
   - Example1: Send
 
   ```
   const headersObj = {
     headers: { authorization: token },
-    password: "$his1sMuchBtter643"
+    body {
+      password: "$his1sMuchBtter643" // required
+    }
   };
 
-  axios.delete(`https://(api-web-address)/users/${2}`, headersObj)
+  axios.delete(`https://(api-web-address)/users`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -596,7 +690,63 @@ Fill in later
   ```
   [
     {
-      count: 2
+      count: 1
+    }
+  ]
+  ```
+
+  - DELETE `/users/articles` Requires AUTHORIZATION
+
+  - Explanation: remove all articles from the user board
+  - Note: Can only delete the articles on your own user board (not articles on other user boards)
+  - Example1: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+  };
+
+  axios.delete(`https://(api-web-address)/users/articles`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+  [
+    {
+      count: 3
+    }
+  ]
+  ```
+
+  - DELETE `/users/articles/:id` Requires AUTHORIZATION
+
+  - Explanation: remove a single article from the user board
+  - Note: Can only delete your own user account (not articles on other user boards)
+  - Example1: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token }
+  };
+
+  axios.delete(`https://(api-web-address)/users/articles/${1}`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+  [
+    {
+      count: 1
     }
   ]
   ```
