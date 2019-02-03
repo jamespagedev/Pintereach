@@ -644,7 +644,9 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 
   1. Little to no contributions were made by this team member.
   2. Team member was collaborative, able to work in a team environment
-  3. Pair programmed with the Web UI and Web Architect
+  3. [x] Pair programmed with the Web UI and Web Architect
+
+  - Me and Jeff did zoom chats over the weekend (before project starting day on Monday)
 
 - Student should have built a CRUD API using Node/Express
 
@@ -665,18 +667,6 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
   3. Student added authorization and a way to restrict endpoints to users with that are authorized to access them. This could be as simple as using roles and restricting endpoints to a particular role.
 
 - Project has automated testing suites covering Endpoints and Business Logic
-
-  1. The solution does not have any automated testing in place.
-  2. The core business logic is tested using unit tests.
-  3. The project has unit and integration tests that include end to end testing using a test database.
-
-- API is deployed to the web
-
-  1. The solution does not have any automated testing in place.
-  2. The core business logic is tested using unit tests.
-  3. The project has unit and integration tests that include end to end testing using a test database.
-
-- API is deployed to the web
 
   1. The solution does not have any automated testing in place.
   2. The core business logic is tested using unit tests.
