@@ -4,7 +4,7 @@
 - [Tech Stack](#TechStack)
 - [Project Summary](#ProjectSummary)
 - [/Endpoints (For Frontend Usage)](#FrontEnd)
-  - [Auth](#Auth)articles
+  - [Auth](#Auth)
   - [Articles](#Articles)
   - [Users](#Users)
 - [Table Schema](#TableSchema)
