@@ -3,7 +3,7 @@
  **************************************************************************************************/
 require('dotenv').config();
 const express = require('express');
-const db = require('../../data/dbConfig.js');
+const db = require('../../data/helpers/dbUsersHelper.js');
 // const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -32,14 +32,51 @@ function authenticate(req, res, next) {
   }
 }
 
+function authorization() {
+  return function(req, res, next) {
+    user = db
+      .getUser(req.decodedToken.id)
+      .then(users => {
+        if (users[0].id === Number(req.params.id) || users[0].is_admin) {
+          next();
+        } else {
+          next({ code: 401 });
+        }
+      })
+      .catch(err => {
+        next(err);
+      });
+    // if (departments.includes(req.decodedToken.department)) {
+    //   next();
+    // } else {
+    //   res.status(403).json({
+    //     message: `Access Denied: You must be in one of the following departments [${departments}]`
+    //   });
+    // }
+  };
+}
+
 /***************************************************************************************************
  ********************************************* Endpoints *******************************************
  **************************************************************************************************/
 router.get('/', authenticate, (req, res, next) => {
-  db.select('display_name')
-    .from('users')
+  db.getUsers()
     .then(users => res.status(200).send(users))
     .catch(err => next(err));
+});
+
+router.get('/:id', authenticate, authorization(), (req, res, next) => {
+  db.getUser(req.params.id)
+    .then(user => {
+      res.status(200).send(user);
+    })
+    .catch(err => {
+      next(err);
+    });
+
+  // db.getUser(req.params.id)
+  //   .then(users => res.status(200).send(users))
+  //   .catch(err => next(err));
 });
 
 /***************************************************************************************************

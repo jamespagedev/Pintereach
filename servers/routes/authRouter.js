@@ -11,10 +11,11 @@ const jwt = require('jsonwebtoken');
 /***************************************************************************************************
  ******************************************** middleware *******************************************
  **************************************************************************************************/
-function generateToken(id, username) {
+function generateToken(id, username, isAdmin) {
   const payload = {
     id: id,
-    username: username
+    username: username,
+    is_admin: isAdmin
   };
 
   const secret =
@@ -55,7 +56,11 @@ router.post('/register', (req, res, next) => {
   db.addUser(newUserCreds)
     .then(Ids => {
       try {
-        const token = generateToken(Ids[0], newUserCreds.username);
+        const token = generateToken(
+          Ids[0],
+          newUserCreds.username,
+          newUserCreds.is_admin
+        );
         res.status(201).send({ id: Ids[0], token });
       } catch (err) {
         next(err);
