@@ -16,7 +16,8 @@ const router = express.Router();
  ********************************************* Endpoints *******************************************
  **************************************************************************************************/
 router.get('/', (req, res, next) => {
-  db('users')
+  db.select('username', 'display_name')
+    .from('users')
     .then(users => res.status(200).send(users))
     .catch(err => next(err));
 });

@@ -831,7 +831,7 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 
   1. Student created a data model that exhibits data repetition and does not take advantage of foreign key constraints.
   2. Student built a normalized data model where each entity is tracked in it's own table and where appropriate made use of Foreign Key constraints to ensure data integrity and consistency.
-  3. Student incorporated Knex migration and or seeding scripts to their solution.
+  3. [x] Student incorporated Knex migration and or seeding scripts to their solution.
 
 - The API incorporates authentication
 
@@ -849,10 +849,10 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 
   1. The API is not deployed and only runs on localhost.
   2. The API is deployed on the web and can be accessed from anywhere, but the deployment is done manually.
-  3. The project has continuous deployment configured to deploy on commits to GitHub
+  3. [x] The project has continuous deployment configured to deploy on commits to GitHub
 
 - Secrets are protected using environment variables
 
   1. Any secrets like API keys and hashing secrets are hard-coded in the source code
   2. Secrets are extracted out into environment variables using .env files that most be manually changed when deploying.
-  3. The project is configured to dinamically load the appropriate secrets based on the environment it's running on.
+  3. [x] The project is configured to dinamically load the appropriate secrets based on the environment it's running on.

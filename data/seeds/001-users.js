@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return knex('users')
-    .del()
+    .truncate()
     .then(function() {
       // Inserts seed entries
       return knex('users').insert([
@@ -23,9 +23,9 @@ exports.seed = function(knex, Promise) {
             'http://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg'
         },
         {
-          username: bcrypt.hashSync('reader', 12),
+          username: 'reader',
           display_name: 'reader',
-          password: 'pass123',
+          password: bcrypt.hashSync('pass123', 12),
           email: '',
           img_url: ''
         }

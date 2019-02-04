@@ -17,7 +17,9 @@ function generateToken(id, username) {
     username: username
   };
 
-  const secret = process.env.JWT_SECRET; // hard coding this in the code is bad practice
+  const secret =
+    process.env.JWT_SECRET ||
+    'Should configure local .env file for secretString'; // hard coding this in the code is bad practice
 
   const options = {
     expiresIn: 20 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
@@ -52,9 +54,17 @@ function authenticate(req, res, next) {
  **************************************************************************************************/
 router.post('/register', (req, res, next) => {
   // Precondition - Username must be unique and not used in database
-  const newUserCreds = req.body;
+  let newUserCreds = req.body;
 
-  // const users = ['jamespage', 'catperson', 'reader']; // get list of usernames from database
+  // no trailing spaces for unique properties
+  newUserCreds.username = newUserCreds.username.trim();
+  newUserCreds.display_name = newUserCreds.username.trim();
+  newUserCreds.email = newUserCreds.username.trim();
+
+  // if front did not provide a different display_name... set display_name as username
+  if (!newUserCreds.display_name) {
+    newUserCreds.display_name = newUserCreds.username;
+  }
 
   // Creates a hash password to store in the database...
   newUserCreds.password = bcrypt.hashSync(
@@ -74,7 +84,9 @@ router.post('/register', (req, res, next) => {
     })
     .catch(err => {
       if (err.errno === 19) {
-        res.status(400).json({ error: 'username/email already taken' });
+        res
+          .status(400)
+          .json({ error: 'username/display_name/email already taken' });
       } else {
         next(err);
       }
