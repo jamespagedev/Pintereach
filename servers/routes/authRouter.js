@@ -17,7 +17,9 @@ function generateToken(id, username) {
     username: username
   };
 
-  const secret = 'testing'; // process.env.JWT_SECRET; // hard coding this in the code is bad practice
+  const secret =
+    process.env.JWT_SECRET ||
+    'Should configure local .env file for secretString'; // hard coding this in the code is bad practice
 
   const options = {
     expiresIn: 20 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
