@@ -17,7 +17,7 @@ function generateToken(id, username) {
     username: username
   };
 
-  const secret = process.env.JWT_SECRET; // hard coding this in the code is bad practice
+  const secret = 'testing'; // process.env.JWT_SECRET; // hard coding this in the code is bad practice
 
   const options = {
     expiresIn: 20 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
@@ -66,8 +66,7 @@ router.post('/register', (req, res, next) => {
   db.addUser(newUserCreds)
     .then(Ids => {
       try {
-        // const token = generateToken(Ids[0], newUserCreds.username);
-        const token = 'hello world';
+        const token = generateToken(Ids[0], newUserCreds.username);
         res.status(201).send({ id: Ids[0], token });
       } catch (err) {
         next(err);
