@@ -776,32 +776,40 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 ## users
 
-| Field        | Data Type                  |
-| ------------ | -------------------------- |
-| id           | Int (auto increment)       |
-| username     | String (unique) (required) |
-| display_name | String (optional)          |
-| password     | String (required)          |
-| email        | String (optional)          |
-| img_url      | String (optional)          |
+| Field        | Data Type                          |
+| ------------ | ---------------------------------- |
+| id           | Int (auto increment)               |
+| is_admin     | boolean (optional) (default false) |
+| username     | String (unique) (required)         |
+| display_name | String (optional)                  |
+| password     | String (required)                  |
+| email        | String (optional)                  |
+| img_url      | String (optional)                  |
 
 ## articles
 
 | Field      | Data Type (requires at **LEAST** title **OR** link) |
 | ---------- | --------------------------------------------------- |
 | id         | Int (auto increment)                                |
-| category   | String (optional1)                                  |
-| title      | String (optional2)                                  |
-| cover_page | String (optional3)                                  |
-| link       | Text (optional4)                                    |
+| user_id    | Foreign Key (points to id of users table)           |
+| title      | String (optional1)                                  |
+| cover_page | String (optional2)                                  |
+| link       | Text (optional3)                                    |
 
-## users_articles_relationship
+## categories
 
-| Field      | Data Type            |
-| ---------- | -------------------- |
-| id         | Int (auto increment) |
-| user_id    | Int (required)       |
-| article_id | Int (required)       |
+| Field | Data Type                  |
+| ----- | -------------------------- |
+| id    | Int (auto increment)       |
+| name  | String (Required) (Unique) |
+
+## articles_categories_relationship
+
+| Field         | Data Type                                      |
+| ------------- | ---------------------------------------------- |
+| id            | Int (auto increment)                           |
+| articles_id   | Foreign Key (points to id of articles table)   |
+| categories_id | Foreign Key (points to id of categories table) |
 
 # Project Scores 1/2/3 <a name="Rubrics"></a>
 

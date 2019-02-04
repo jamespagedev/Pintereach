@@ -61,9 +61,9 @@ router.post('/register', (req, res, next) => {
   newUserCreds.display_name = newUserCreds.username.trim();
   newUserCreds.email = newUserCreds.username.trim();
 
-  // if front did not provide a different display_name... set display_name as username
-  if (!newUserCreds.display_name) {
-    newUserCreds.display_name = newUserCreds.username;
+  // only the database administrator can set this this value
+  if (newUserCreds.is_admin) {
+    newUserCreds.is_admin = false;
   }
 
   // Creates a hash password to store in the database...

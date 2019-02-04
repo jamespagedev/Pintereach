@@ -3,8 +3,15 @@ exports.up = function(knex, Promise) {
     // Primary Key 'id'
     tbl.increments();
 
+    // users reference key
+    tbl
+      .integer('users_id')
+      .unsigned()
+      .notNullable()
+      .references('id')
+      .inTable('users');
+
     // Other Columns
-    tbl.string('categories', 255);
     tbl.string('cover_page', 255);
     tbl.string('title', 255);
     tbl.text('link');

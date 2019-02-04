@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     tbl.increments();
 
     // Other Columns
+    tbl.boolean('is_admin').defaultTo(false);
     tbl
       .string('username', 128)
       .notNullable()
