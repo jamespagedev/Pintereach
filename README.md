@@ -62,7 +62,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     img_url: "https://i.imgur.com/mACq7e7.jpg" // optional
   }
 
-  axios.post('https://(api-web-address)/articles', newUser)
+  axios.post('https://pintereach.herokuapp.com/articles', newUser)
     .then(response => {
       console.log(response.data)
     })
@@ -90,7 +90,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     password: "pass123" // required
   }
 
-    axios.post('https://(api-web-address)/articles', creds)
+    axios.post('https://pintereach.herokuapp.com/articles', creds)
     .then(response => {
       console.log(response.data)
     })
@@ -122,7 +122,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get('https://(api-web-address)/articles')
+  axios.get('https://pintereach.herokuapp.com/articles')
     .then(response => {
       console.log(response.data)
     })
@@ -135,18 +135,21 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
+      category: "General"
       cover_page: "HelloWorld.png",
       title: "Hello World",
       link: "https://helloworld.com/"
     },
     {
       id: 2,
+      category: "Other"
       cover_page: "Front.txt",
       title: "Random Article",
       link: ""
     },
     {
       id: 3,
+      category: "Education"
       cover_page: "index.html",
       title: "",
       link: "https://lambdaschool.com/"
@@ -160,7 +163,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/articles/${2}`)
+  axios.get(`https://pintereach.herokuapp.com/articles/${2}`)
     .then(response => {
       console.log(response.data)
     })
@@ -173,6 +176,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 2,
+      category: "Other"
       cover_page: "Front.txt",
       title: "Random Article",
       link: ""
@@ -186,7 +190,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/articles/${3}/users`)
+  axios.get(`https://pintereach.herokuapp.com/articles/${3}/users`)
     .then(response => {
       console.log(response.data)
     })
@@ -199,6 +203,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 3,
+      category: "Education"
       cover_page: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
@@ -222,7 +227,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get('https://(api-web-address)/articles/users/')
+  axios.get('https://pintereach.herokuapp.com/articles/users/')
     .then(response => {
       console.log(response.data)
     })
@@ -235,6 +240,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
+      category: "General"
       cover_page: "HelloWorld.png",
       title: "Hello World",
       link: "https://helloworld.com/",
@@ -255,6 +261,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     },
     {
       id: 2,
+      category: "Other"
       cover_page: "Front.txt",
       title: "Random Article",
       link: "",
@@ -267,6 +274,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     },
     {
       id: 3,
+      category: "Education"
       cover_page: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
@@ -294,13 +302,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
   headerObj = {
     headers: { authorization: token },
     body: {
+      category: "New"
       cover_page: "CoverLetter.doc",
       title: "New Article",
       link: ""
     }
   }
 
-  axios.post(`https://(api-web-address)/articles`, headersObj)
+  axios.post(`https://pintereach.herokuapp.com/articles`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -313,6 +322,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 4,
+      category: "New"
       cover_page: "CoverLetter.doc",
       title: "New Article",
       link: ""
@@ -331,13 +341,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
   headerObj = {
     headers: { authorization: token },
     body: {
+      category: "New"
       cover_page: "CoverLetter.doc",
       title: "New Article",
       link: "https://newarticle.com/"
     }
   }
 
-  axios.put(`https://(api-web-address)/articles/${4}`, headersObj)
+  axios.put(`https://pintereach.herokuapp.com/articles/${4}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -350,6 +361,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 4,
+      category: "New"
       cover_page: "CoverLetter.doc",
       title: "New Article",
       link: "https://newarticle.com/"
@@ -368,7 +380,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.delete(`https://(api-web-address)/articles/${4}`, headersObj)
+  axios.delete(`https://pintereach.herokuapp.com/articles/${4}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -393,7 +405,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get('https://(api-web-address)/users')
+  axios.get('https://pintereach.herokuapp.com/users')
     .then(response => {
       console.log(response.data)
     })
@@ -426,7 +438,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/users/${1}`)
+  axios.get(`https://pintereach.herokuapp.com/users/${1}`)
     .then(response => {
       console.log(response.data)
     })
@@ -453,7 +465,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/users/articles`)
+  axios.get(`https://pintereach.herokuapp.com/users/articles`)
     .then(response => {
       console.log(response.data)
     })
@@ -470,12 +482,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
       articles: [
         {
           id: 1,
+          category: "General"
           cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/",
         },
         {
           id: 3,
+          category: "Education"
           cover_page: "index.html",
           title: "",
           link: "https://lambdaschool.com/",
@@ -488,12 +502,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
       articles: [
         {
           id: 1,
+          category: "General"
           cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/",
         },
         {
           id: 2,
+          category: "Other"
           cover_page: "Front.txt",
           title: "Random Article",
           link: "",
@@ -506,12 +522,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
       articles: [
         {
           id: 1,
+          category: "General"
           cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/",
         },
         {
           id: 3,
+          category: "Education"
           cover_page: "index.html",
           title: "",
           link: "https://lambdaschool.com/",
@@ -527,7 +545,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/users/${2}/articles`)
+  axios.get(`https://pintereach.herokuapp.com/users/${2}/articles`)
     .then(response => {
       console.log(response.data)
     })
@@ -544,12 +562,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
       articles: [
         {
           id: 1,
+          category: "General"
           cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/"
         },
         {
           id: 3,
+          category: "Education"
           cover_page: "index.html",
           title: "",
           link: "https://lambdaschool.com/"
@@ -565,7 +585,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  axios.get(`https://(api-web-address)/users/${2}/articles/${1}`)
+  axios.get(`https://pintereach.herokuapp.com/users/${2}/articles/${1}`)
     .then(response => {
       console.log(response.data)
     })
@@ -581,6 +601,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
       display_name: "catperson",
       article: {
         id: 1,
+        category: "General"
         cover_page: "HelloWorld.png",
         title: "Hello World",
         link: "https://helloworld.com/"
@@ -605,7 +626,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.post(`https://(api-web-address)/users/articles`, headersObj)
+  axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -629,7 +650,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.put(`https://(api-web-address)/users/${2}/articles`, headersObj)
+  axios.put(`https://pintereach.herokuapp.com/users/${2}/articles`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -647,7 +668,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.put(`https://(api-web-address)/users`, headersObj)
+  axios.put(`https://pintereach.herokuapp.com/users`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -678,7 +699,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   };
 
-  axios.delete(`https://(api-web-address)/users`, headersObj)
+  axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -706,7 +727,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token },
   };
 
-  axios.delete(`https://(api-web-address)/users/articles`, headersObj)
+  axios.delete(`https://pintereach.herokuapp.com/users/articles`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -734,7 +755,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     headers: { authorization: token }
   };
 
-  axios.delete(`https://(api-web-address)/users/articles/${1}`, headersObj)
+  axios.delete(`https://pintereach.herokuapp.com/users/articles/${1}`, headersObj)
     .then(response => {
       console.log(response.data)
     })
@@ -769,9 +790,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
 | Field      | Data Type (requires at **LEAST** title **OR** link) |
 | ---------- | --------------------------------------------------- |
 | id         | Int (auto increment)                                |
-| cover_page | String (optional1)                                  |
+| category   | String (optional1)                                  |
 | title      | String (optional2)                                  |
-| link       | Text (optional3)                                    |
+| cover_page | String (optional3)                                  |
+| link       | Text (optional4)                                    |
 
 ## users_articles_relationship
 

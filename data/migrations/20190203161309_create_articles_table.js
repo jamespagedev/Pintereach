@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     tbl.increments();
 
     // Other Columns
+    tbl.string('categories', 255);
     tbl.string('cover_page', 255);
     tbl.string('title', 255);
     tbl.text('link');

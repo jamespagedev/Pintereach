@@ -59,7 +59,7 @@ router.post('/register', (req, res, next) => {
   // Creates a hash password to store in the database...
   newUserCreds.password = bcrypt.hashSync(
     newUserCreds.password,
-    14 // db.settings.pwdHashLength
+    12 // db.settings.pwdHashLength
   );
 
   // Adds a single user to the database
@@ -81,7 +81,7 @@ router.post('/register', (req, res, next) => {
     });
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
   // Check username exist AND client password matches hash password in db
   const userCreds = req.body;
 
@@ -91,13 +91,13 @@ router.post('/login', (req, res) => {
       // If user object was obtained AND...
       // the client password matches the db hash password
       if (user && bcrypt.compareSync(userCreds.password, user.password)) {
-        const token = generateToken(user);
+        const token = generateToken(user.id, user.username);
         res.status(200).json({ message: 'Logged in', token });
       } else {
-        res.status(401).json({ err: 'You shall not pass!' });
+        next({ code: 401 });
       }
     })
-    .catch(err => res.status(500).send(err));
+    .catch(err => next(err));
 });
 
 /***************************************************************************************************

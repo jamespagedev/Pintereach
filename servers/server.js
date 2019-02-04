@@ -16,8 +16,6 @@ server.use(express.json()); // built-in
 server.use(morgan('short')); // logging middleware
 server.use(cors()); // allows domains/ports to connect to your server
 
-server.use(errorHandler);
-
 /***************************************************************************************************
  ********************************************** routes *********************************************
  **************************************************************************************************/
@@ -32,6 +30,8 @@ const authRouter = require('./routes/authRouter.js');
 server.use('/auth', authRouter);
 // server.use('/users', usersRouter);
 // server.use('/articles', articlesRouter);
+
+server.use(errorHandler);
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************
