@@ -66,8 +66,8 @@ router.post('/register', (req, res, next) => {
   db.addUser(newUserCreds)
     .then(Ids => {
       try {
-        // const token = generateToken(Ids[0], newUserCreds.username);
-        res.status(201).send(Ids);
+        const token = generateToken(Ids[0], newUserCreds.username);
+        res.status(201).send([{ id: Ids[0], token: token }]);
       } catch (err) {
         next(err);
       }
