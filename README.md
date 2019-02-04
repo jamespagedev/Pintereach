@@ -56,10 +56,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   const newUser = {
     username: "jamespage", // (Unique) required
-    displayName: "RandomBlogger", // optional
+    display_name: "RandomBlogger", // optional
     password: "pass123", // required
     email: "jp@email.com", // (Unique) optional
-    imgUrl: "https://i.imgur.com/mACq7e7.jpg" // optional
+    img_url: "https://i.imgur.com/mACq7e7.jpg" // optional
   }
 
   axios.post('https://(api-web-address)/articles', newUser)
@@ -105,9 +105,9 @@ As a researcher, it's difficult to keep track of articles you want to read later
       user: {
         id: 1,
         username: "jamespage",
-        displayName: "James Page",
+        display_name: "James Page",
         email: "jp@email.com",
-        imgUrl: "https://i.imgur.com/mACq7e7.jpg"
+        img_url: "https://i.imgur.com/mACq7e7.jpg"
       },
       token: "$adfg9324rt$@!&asdgfh92fdsa2"
     }
@@ -135,19 +135,19 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
-      coverPage: "HelloWorld.png",
+      cover_page: "HelloWorld.png",
       title: "Hello World",
       link: "https://helloworld.com/"
     },
     {
       id: 2,
-      coverPage: "Front.txt",
+      cover_page: "Front.txt",
       title: "Random Article",
       link: ""
     },
     {
       id: 3,
-      coverPage: "index.html",
+      cover_page: "index.html",
       title: "",
       link: "https://lambdaschool.com/"
     }
@@ -173,7 +173,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 2,
-      coverPage: "Front.txt",
+      cover_page: "Front.txt",
       title: "Random Article",
       link: ""
     }
@@ -199,17 +199,17 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 3,
-      coverPage: "index.html",
+      cover_page: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
       users: [
         {
           id: 1,
-          displayName: "RandomBlogger", // will use username if displayName is blank
+          display_name: "RandomBlogger", // will use username if display_name is blank
         },
         {
           id: 2,
-          displayName: "catperson", // will use username if displayName is blank
+          display_name: "catperson", // will use username if display_name is blank
         }
       ]
     }
@@ -235,49 +235,49 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
-      coverPage: "HelloWorld.png",
+      cover_page: "HelloWorld.png",
       title: "Hello World",
       link: "https://helloworld.com/",
       users: [
         {
           id: 1,
-          displayName: "RandomBlogger", // will use username if displayName is   blank
+          display_name: "RandomBlogger", // will use username if display_name is   blank
         },
         {
           id: 2,
-          displayName: "catperson", // will use username if displayName is   blank
+          display_name: "catperson", // will use username if display_name is   blank
         },
         {
           id: 3,
-          displayName: "reader" // will use username if displayName is blank
+          display_name: "reader" // will use username if display_name is blank
         }
       ]
     },
     {
       id: 2,
-      coverPage: "Front.txt",
+      cover_page: "Front.txt",
       title: "Random Article",
       link: "",
       users: [
         {
           id: 3,
-          displayName: "reader" // will use username if displayName is blank
+          display_name: "reader" // will use username if display_name is blank
         }
       ]
     },
     {
       id: 3,
-      coverPage: "index.html",
+      cover_page: "index.html",
       title: "",
       link: "https://lambdaschool.com/",
       users: [
         {
           id: 1,
-          displayName: "RandomBlogger", // will use username if displayName is   blank
+          display_name: "RandomBlogger", // will use username if display_name is   blank
         },
         {
           id: 2,
-          displayName: "catperson", // will use username if displayName is   blank
+          display_name: "catperson", // will use username if display_name is   blank
         }
       ]
     }
@@ -294,7 +294,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   headerObj = {
     headers: { authorization: token },
     body: {
-      coverPage: "CoverLetter.doc",
+      cover_page: "CoverLetter.doc",
       title: "New Article",
       link: ""
     }
@@ -313,7 +313,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 4,
-      coverPage: "CoverLetter.doc",
+      cover_page: "CoverLetter.doc",
       title: "New Article",
       link: ""
     }
@@ -331,7 +331,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   headerObj = {
     headers: { authorization: token },
     body: {
-      coverPage: "CoverLetter.doc",
+      cover_page: "CoverLetter.doc",
       title: "New Article",
       link: "https://newarticle.com/"
     }
@@ -350,7 +350,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 4,
-      coverPage: "CoverLetter.doc",
+      cover_page: "CoverLetter.doc",
       title: "New Article",
       link: "https://newarticle.com/"
     }
@@ -406,20 +406,20 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
-      displayName: "RandomBlogger" // displayName value will be username if display name is empty
+      display_name: "RandomBlogger" // display_name value will be username if display name is empty
     },
     {
       id: 2,
-      displayName: "catperson" // displayName value will be username if display name is empty
+      display_name: "catperson" // display_name value will be username if display name is empty
     },
     {
       id: 3,
-      displayName: "reader" // displayName value will be username if display name is empty
+      display_name: "reader" // display_name value will be username if display name is empty
     }
   ]
   ```
 
-- GET `/users/:id`
+- GET `/users/:id` Require AUTHORIZATION
 
   - Explanation: returns single user
   - Rule: Only able to view user attributes if they belong to user logged in
@@ -440,9 +440,9 @@ As a researcher, it's difficult to keep track of articles you want to read later
     {
       id: 1,
       username: "jamespage",
-      displayName: "RandomBlogger",
+      display_name: "RandomBlogger",
       email: "jp@email.com",
-      imgUrl: "https://i.imgur.com/mACq7e7.jpg"
+      img_url: "https://i.imgur.com/mACq7e7.jpg"
     }
   ]
   ```
@@ -466,17 +466,17 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
-      displayName: "RandomBlogger", // will use username if displayName is   blank
+      display_name: "RandomBlogger", // will use username if display_name is   blank
       articles: [
         {
           id: 1,
-          coverPage: "HelloWorld.png",
+          cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/",
         },
         {
           id: 3,
-          coverPage: "index.html",
+          cover_page: "index.html",
           title: "",
           link: "https://lambdaschool.com/",
         }
@@ -484,17 +484,17 @@ As a researcher, it's difficult to keep track of articles you want to read later
     },
     {
       id: 2,
-      displayName: "catperson", // will use username if displayName is   blank
+      display_name: "catperson", // will use username if display_name is   blank
       articles: [
         {
           id: 1,
-          coverPage: "HelloWorld.png",
+          cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/",
         },
         {
           id: 2,
-          coverPage: "Front.txt",
+          cover_page: "Front.txt",
           title: "Random Article",
           link: "",
         }
@@ -502,17 +502,17 @@ As a researcher, it's difficult to keep track of articles you want to read later
     },
     {
       id: 3,
-      displayName: "reader" // will use username if displayName is blank
+      display_name: "reader" // will use username if display_name is blank
       articles: [
         {
           id: 1,
-          coverPage: "HelloWorld.png",
+          cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/",
         },
         {
           id: 3,
-          coverPage: "index.html",
+          cover_page: "index.html",
           title: "",
           link: "https://lambdaschool.com/",
         }
@@ -540,17 +540,17 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 2,
-      displayName: "catperson",
+      display_name: "catperson",
       articles: [
         {
           id: 1,
-          coverPage: "HelloWorld.png",
+          cover_page: "HelloWorld.png",
           title: "Hello World",
           link: "https://helloworld.com/"
         },
         {
           id: 3,
-          coverPage: "index.html",
+          cover_page: "index.html",
           title: "",
           link: "https://lambdaschool.com/"
         }
@@ -578,10 +578,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 2,
-      displayName: "catperson",
+      display_name: "catperson",
       article: {
         id: 1,
-        coverPage: "HelloWorld.png",
+        cover_page: "HelloWorld.png",
         title: "Hello World",
         link: "https://helloworld.com/"
       }
@@ -755,22 +755,23 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 ## users
 
-| Field    | Data Type                  |
-| -------- | -------------------------- |
-| id       | Int (auto increment)       |
-| username | String (unique) (required) |
-| password | String (required)          |
-| email    | String (optional)          |
-| img_url  | String (optional)          |
+| Field        | Data Type                  |
+| ------------ | -------------------------- |
+| id           | Int (auto increment)       |
+| username     | String (unique) (required) |
+| display_name | String (optional)          |
+| password     | String (required)          |
+| email        | String (optional)          |
+| img_url      | String (optional)          |
 
 ## articles
 
-| Field        | Data Type (requires at **LEAST** title **OR** link) |
-| ------------ | --------------------------------------------------- |
-| id           | Int (auto increment)                                |
-| cover_letter | String (optional1)                                  |
-| title        | String (optional1)                                  |
-| link         | String (optional2)                                  |
+| Field      | Data Type (requires at **LEAST** title **OR** link) |
+| ---------- | --------------------------------------------------- |
+| id         | Int (auto increment)                                |
+| cover_page | String (optional1)                                  |
+| title      | String (optional2)                                  |
+| link       | Text (optional3)                                    |
 
 ## users_articles_relationship
 
