@@ -11,7 +11,14 @@ const getUser = id => {
     .where('id', id);
 };
 
+const editUser = (id, changes) => {
+  return db('users')
+    .where('id', id)
+    .update(changes);
+};
+
 module.exports = {
   getUsers,
-  getUser
+  getUser,
+  editUser
 };

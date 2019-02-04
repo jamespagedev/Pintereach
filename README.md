@@ -108,6 +108,422 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
+> /users <a name="UsersEnd"></a>
+
+- [x] GET `/users` Requires AUTHORIZATION
+
+  - Explanation: returns all users
+  - Example: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token }
+  };
+
+  axios.get('https://pintereach.herokuapp.com/users', headersObject)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+  [
+    {
+      id: 1,
+      display_name: "RandomBlogger" // display_name value will be username if display name is empty
+    },
+    {
+      id: 2,
+      display_name: "catperson" // display_name value will be username if display name is empty
+    },
+    {
+      id: 3,
+      display_name: "reader" // display_name value will be username if display name is empty
+    }
+  ]
+  ```
+
+- [x] GET `/users/:id` Require AUTHORIZATION AND AUTHENTICATION(admin and/or self-user only)
+
+  - Explanation: returns single user
+  - Rule: User is only able to view user attributes if they belong to user logged in. Admin can view user attributes of any user.
+  - Example: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token }
+  };
+
+  axios.get(`https://pintereach.herokuapp.com/users/${1}`)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+- example: Receive
+
+```
+
+[
+{
+id: 1,
+username: "jamespage",
+display_name: "RandomBlogger",
+email: "jp@email.com",
+img_url: "https://i.imgur.com/mACq7e7.jpg"
+}
+]
+
+```
+
+- GET `/users/articles`
+
+- Explanation: Returns a list of all users with all their articles
+- Example: Send
+
+```
+
+axios.get(`https://pintereach.herokuapp.com/users/articles`)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- example: Receive
+
+```
+
+[
+{
+id: 1,
+display_name: "RandomBlogger", // will use username if display_name is blank
+articles: [
+{
+id: 1,
+category: "General"
+cover_page: "HelloWorld.png",
+title: "Hello World",
+link: "https://helloworld.com/",
+},
+{
+id: 3,
+category: "Education"
+cover_page: "index.html",
+title: "",
+link: "https://lambdaschool.com/",
+}
+]
+},
+{
+id: 2,
+display_name: "catperson", // will use username if display_name is blank
+articles: [
+{
+id: 1,
+category: "General"
+cover_page: "HelloWorld.png",
+title: "Hello World",
+link: "https://helloworld.com/",
+},
+{
+id: 2,
+category: "Other"
+cover_page: "Front.txt",
+title: "Random Article",
+link: "",
+}
+]
+},
+{
+id: 3,
+display_name: "reader" // will use username if display_name is blank
+articles: [
+{
+id: 1,
+category: "General"
+cover_page: "HelloWorld.png",
+title: "Hello World",
+link: "https://helloworld.com/",
+},
+{
+id: 3,
+category: "Education"
+cover_page: "index.html",
+title: "",
+link: "https://lambdaschool.com/",
+}
+]
+}
+]
+
+```
+
+- GET `/users/:id/articles`
+
+- Explanation: Returns a single user with all articles
+- Example: Send
+
+```
+
+axios.get(`https://pintereach.herokuapp.com/users/${2}/articles`)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- example: Receive
+
+```
+
+[
+{
+id: 2,
+display_name: "catperson",
+articles: [
+{
+id: 1,
+category: "General"
+cover_page: "HelloWorld.png",
+title: "Hello World",
+link: "https://helloworld.com/"
+},
+{
+id: 3,
+category: "Education"
+cover_page: "index.html",
+title: "",
+link: "https://lambdaschool.com/"
+}
+]
+}
+]
+
+```
+
+- GET `/users/:userId/articles/:articleId`
+
+- Explanation: Returns a single user with a sincle article
+- Example: Send
+
+```
+
+axios.get(`https://pintereach.herokuapp.com/users/${2}/articles/${1}`)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- example: Receive
+
+```
+
+[
+{
+id: 2,
+display_name: "catperson",
+article: {
+id: 1,
+category: "General"
+cover_page: "HelloWorld.png",
+title: "Hello World",
+link: "https://helloworld.com/"
+}
+}
+]
+
+```
+
+- Post `/users/articles` Requires AUTHORIZATION
+
+- Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
+- Note: Can only post articles on your own user boards... not other use boards
+- Example1: Send
+
+```
+
+const headersObj = {
+headers: { authorization: token },
+body: {
+articlesIds: [1, 3]
+}
+]
+}
+};
+
+axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- [x] PUT `/users/:id` Requires AUTHORIZATION
+
+- Explanation: edit a user key/value pairs (including password)
+- Note: Only SAME USER or ADMIN can change the user attributes (not other users)
+- Note2: DO NOT include `is_admin` property in the `headersObj`, or it will set it to false.
+
+  - Example1: Send
+
+  ```
+  const headersObj = {
+  headers: { authorization: token },
+  body: {
+  username: "catperson", // required (username cannot be changed)
+  // Note: If changing the password, you must provide both the old and new   password
+  oldpassword: "cats1", // optional
+  newpassword: "$his1sMuchBtter643" // optional
+  }
+  };
+
+  axios.put(`https://pintereach.herokuapp.com/users/${2}/articles`, headersObj)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+  - Example2: Send
+
+  ```
+  const headersObj = {
+  headers: { authorization: token },
+  body: {
+  username: "catperson",
+  email: "kitty@email.com"
+  }
+  };
+
+  axios.put(`https://pintereach.herokuapp.com/users`, headersObj)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+  - example: Receive
+
+  ```
+
+  [
+    {
+      'Users Changed': 1
+      message: "changes successful"
+    }
+  ]
+
+  ```
+
+- DELETE `/users` Requires AUTHORIZATION
+
+- Explanation: remove your own user account from the database
+- Note: Can only delete your own user account (not other user accounts)
+- Example1: Send
+
+```
+
+const headersObj = {
+headers: { authorization: token },
+body {
+password: "\$his1sMuchBtter643" // required
+}
+};
+
+axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- example: Receive
+
+```
+
+[
+{
+count: 1
+}
+]
+
+```
+
+- DELETE `/users/articles` Requires AUTHORIZATION
+
+- Explanation: remove all articles from the user board
+- Note: Can only delete the articles on your own user board (not articles on other user boards)
+- Example1: Send
+
+```
+
+const headersObj = {
+headers: { authorization: token },
+};
+
+axios.delete(`https://pintereach.herokuapp.com/users/articles`, headersObj)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- example: Receive
+
+```
+
+[
+{
+count: 3
+}
+]
+
+```
+
+- DELETE `/users/articles/:id` Requires AUTHORIZATION
+
+- Explanation: remove a single article from the user board
+- Note: Can only delete your own user account (not articles on other user boards)
+- Example1: Send
+
+```
+
+const headersObj = {
+headers: { authorization: token }
+};
+
+axios.delete(`https://pintereach.herokuapp.com/users/articles/${1}`, headersObj)
+.then(response => {
+console.log(response.data)
+})
+.catch(err => console.log(err));
+
+```
+
+- example: Receive
+
+```
+
+[
+{
+count: 1
+}
+]
+
+```
+
 > /articles <a name="ArticlesEnd"></a>
 
 - GET `/articles`
@@ -390,423 +806,6 @@ As a researcher, it's difficult to keep track of articles you want to read later
     }
   ]
   ```
-
-> /users <a name="UsersEnd"></a>
-
-- [x] GET `/users` Requires AUTHORIZATION
-
-  - Explanation: returns all users
-  - Example: Send
-
-  ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get('https://pintereach.herokuapp.com/users', headersObject)
-    .then(response => {
-      console.log(response.data)
-    })
-    .catch(err => console.log(err));
-  ```
-
-  - example: Receive
-
-  ```
-  [
-    {
-      id: 1,
-      display_name: "RandomBlogger" // display_name value will be username if display name is empty
-    },
-    {
-      id: 2,
-      display_name: "catperson" // display_name value will be username if display name is empty
-    },
-    {
-      id: 3,
-      display_name: "reader" // display_name value will be username if display name is empty
-    }
-  ]
-  ```
-
-- GET `/users/:id` Require AUTHORIZATION AND AUTHENTICATION(admin and/or self-user only)
-
-  - Explanation: returns single user
-  - Rule: User is only able to view user attributes if they belong to user logged in. Admin can view user attributes of any user.
-  - Example: Send
-
-  ```
-  const headersObj = {
-    headers: { authorization: token }
-  };
-
-  axios.get(`https://pintereach.herokuapp.com/users/${1}`)
-  .then(response => {
-  console.log(response.data)
-  })
-  .catch(err => console.log(err));
-  ```
-
-- example: Receive
-
-```
-
-[
-{
-id: 1,
-username: "jamespage",
-display_name: "RandomBlogger",
-email: "jp@email.com",
-img_url: "https://i.imgur.com/mACq7e7.jpg"
-}
-]
-
-```
-
-- GET `/users/articles`
-
-- Explanation: Returns a list of all users with all their articles
-- Example: Send
-
-```
-
-axios.get(`https://pintereach.herokuapp.com/users/articles`)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-id: 1,
-display_name: "RandomBlogger", // will use username if display_name is blank
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/",
-},
-{
-id: 3,
-category: "Education"
-cover_page: "index.html",
-title: "",
-link: "https://lambdaschool.com/",
-}
-]
-},
-{
-id: 2,
-display_name: "catperson", // will use username if display_name is blank
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/",
-},
-{
-id: 2,
-category: "Other"
-cover_page: "Front.txt",
-title: "Random Article",
-link: "",
-}
-]
-},
-{
-id: 3,
-display_name: "reader" // will use username if display_name is blank
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/",
-},
-{
-id: 3,
-category: "Education"
-cover_page: "index.html",
-title: "",
-link: "https://lambdaschool.com/",
-}
-]
-}
-]
-
-```
-
-- GET `/users/:id/articles`
-
-- Explanation: Returns a single user with all articles
-- Example: Send
-
-```
-
-axios.get(`https://pintereach.herokuapp.com/users/${2}/articles`)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-id: 2,
-display_name: "catperson",
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/"
-},
-{
-id: 3,
-category: "Education"
-cover_page: "index.html",
-title: "",
-link: "https://lambdaschool.com/"
-}
-]
-}
-]
-
-```
-
-- GET `/users/:userId/articles/:articleId`
-
-- Explanation: Returns a single user with a sincle article
-- Example: Send
-
-```
-
-axios.get(`https://pintereach.herokuapp.com/users/${2}/articles/${1}`)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-id: 2,
-display_name: "catperson",
-article: {
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/"
-}
-}
-]
-
-```
-
-- Post `/users/articles` Requires AUTHORIZATION
-
-- Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
-- Note: Can only post articles on your own user boards... not other use boards
-- Example1: Send
-
-```
-
-const headersObj = {
-headers: { authorization: token },
-body: {
-articlesIds: [1, 3]
-}
-]
-}
-};
-
-axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- PUT `/users` Requires AUTHORIZATION
-
-- Explanation: edit a user key/value pairs (including password)
-- Note: Can only change the user attributes of your own user (not other users)
-- Example1: Send
-
-```
-
-const headersObj = {
-headers: { authorization: token },
-body: {
-username: "catperson", // required (username cannot be changed)
-// Note: If changing the password, you must provide both the old and new password
-oldpassword: "cats1", // optional
-newpassword: "\$his1sMuchBtter643" // optional
-}
-};
-
-axios.put(`https://pintereach.herokuapp.com/users/${2}/articles`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- Example2: Send
-
-```
-
-const headersObj = {
-headers: { authorization: token },
-body: {
-username: "catperson",
-email: "kitty@email.com"
-}
-};
-
-axios.put(`https://pintereach.herokuapp.com/users`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-id: 2
-}
-]
-
-```
-
-- DELETE `/users` Requires AUTHORIZATION
-
-- Explanation: remove your own user account from the database
-- Note: Can only delete your own user account (not other user accounts)
-- Example1: Send
-
-```
-
-const headersObj = {
-headers: { authorization: token },
-body {
-password: "\$his1sMuchBtter643" // required
-}
-};
-
-axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-count: 1
-}
-]
-
-```
-
-- DELETE `/users/articles` Requires AUTHORIZATION
-
-- Explanation: remove all articles from the user board
-- Note: Can only delete the articles on your own user board (not articles on other user boards)
-- Example1: Send
-
-```
-
-const headersObj = {
-headers: { authorization: token },
-};
-
-axios.delete(`https://pintereach.herokuapp.com/users/articles`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-count: 3
-}
-]
-
-```
-
-- DELETE `/users/articles/:id` Requires AUTHORIZATION
-
-- Explanation: remove a single article from the user board
-- Note: Can only delete your own user account (not articles on other user boards)
-- Example1: Send
-
-```
-
-const headersObj = {
-headers: { authorization: token }
-};
-
-axios.delete(`https://pintereach.herokuapp.com/users/articles/${1}`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-count: 1
-}
-]
-
-```
 
 # Table Schema <a name="TableSchema"></a>
 

@@ -4,7 +4,7 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('../../data/helpers/dbUsersHelper.js');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
@@ -46,13 +46,6 @@ function authorization() {
       .catch(err => {
         next(err);
       });
-    // if (departments.includes(req.decodedToken.department)) {
-    //   next();
-    // } else {
-    //   res.status(403).json({
-    //     message: `Access Denied: You must be in one of the following departments [${departments}]`
-    //   });
-    // }
   };
 }
 
@@ -73,10 +66,42 @@ router.get('/:id', authenticate, authorization(), (req, res, next) => {
     .catch(err => {
       next(err);
     });
+});
 
-  // db.getUser(req.params.id)
-  //   .then(users => res.status(200).send(users))
-  //   .catch(err => next(err));
+router.put('/:id', authenticate, authorization(), (req, res, next) => {
+  let changes = req.body;
+
+  db.getUser(req.params.id)
+    .then(users => {
+      if (changes.username) {
+        changes.username = changes.username.trim();
+      }
+      if (changes.display_name) {
+        changes.display_name = changes.display_name.trim();
+      }
+      if (changes.email) {
+        changes.email = changes.email.trim();
+      }
+      if (changes.password) {
+        changes.password = bcrypt.hashSync(changes.password, 12);
+      }
+
+      // only the database administrator can set this this value
+      if (changes.is_admin) {
+        changes.is_admin = false;
+      }
+
+      db.editUser(users[0].id, changes)
+        .then(response => {
+          res
+            .status(200)
+            .json([
+              { 'Users Changed': response, message: 'changes successful' }
+            ]);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
 });
 
 /***************************************************************************************************
