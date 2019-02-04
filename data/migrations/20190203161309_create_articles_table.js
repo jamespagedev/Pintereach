@@ -12,5 +12,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropUnique('name').dropTableIfExists('articles');
+  return knex.schema.dropTableIfExists('articles');
 };

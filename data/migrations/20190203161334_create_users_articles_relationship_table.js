@@ -19,7 +19,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema
-    .dropUnique('name')
-    .dropTableIfExists('users_articles_relationship');
+  return knex.schema.dropTableIfExists('users_articles_relationship');
 };
