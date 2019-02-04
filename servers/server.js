@@ -24,11 +24,11 @@ server.get('/', (req, res) => {
 });
 
 const authRouter = require('./routes/authRouter.js');
-// const usersRouter = require('./routes/usersRouter.js');
+const usersRouter = require('./routes/usersRouter.js');
 // const articlesRouter = require('./routes/articlesRouter.js');
 
 server.use('/auth', authRouter);
-// server.use('/users', usersRouter);
+server.use('/users', usersRouter);
 // server.use('/articles', articlesRouter);
 
 server.use(errorHandler);
