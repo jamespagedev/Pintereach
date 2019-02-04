@@ -102,13 +102,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     {
-      user: {
-        id: 1,
-        username: "jamespage",
-        display_name: "James Page",
-        email: "jp@email.com",
-        img_url: "https://i.imgur.com/mACq7e7.jpg"
-      },
+      message: "Logged in",
       token: "$adfg9324rt$@!&asdgfh92fdsa2"
     }
   ]
@@ -399,7 +393,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 > /users <a name="UsersEnd"></a>
 
-- GET `/users`
+- GET `/users` Requires AUTHORIZATION
 
   - Explanation: returns all users
   - Example: Send

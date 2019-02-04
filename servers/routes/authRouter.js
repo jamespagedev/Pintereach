@@ -22,31 +22,10 @@ function generateToken(id, username) {
     'Should configure local .env file for secretString'; // hard coding this in the code is bad practice
 
   const options = {
-    expiresIn: 20 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
+    expiresIn: 60 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
   };
 
   return jwt.sign(payload, secret, options);
-}
-
-function authenticate(req, res, next) {
-  // the auth token is normally sent in the authorization header
-  const token = req.headers.authorization;
-  const secret =
-    process.env.JWT_SECRET ||
-    'Should configure local .env file for secretString';
-
-  if (token) {
-    jwt.verify(token, secret, (err, decodedToken) => {
-      if (err) {
-        res.status(401).json({ message: 'invalid token' });
-      } else {
-        req.decodedToken = decodedToken;
-        next();
-      }
-    });
-  } else {
-    res.status(401).json({ message: 'no token provided' });
-  }
 }
 
 /***************************************************************************************************

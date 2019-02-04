@@ -6,16 +6,36 @@ const express = require('express');
 const db = require('../../data/dbConfig.js');
 // const bcrypt = require('bcryptjs');
 const router = express.Router();
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 /***************************************************************************************************
  ******************************************** middleware *******************************************
  **************************************************************************************************/
+function authenticate(req, res, next) {
+  // the auth token is normally sent in the authorization header
+  const token = req.headers.authorization;
+  const secret =
+    process.env.JWT_SECRET ||
+    'Should configure local .env file for secretString';
+
+  if (token) {
+    jwt.verify(token, secret, (err, decodedToken) => {
+      if (err) {
+        res.status(401).json({ message: 'invalid token' });
+      } else {
+        req.decodedToken = decodedToken;
+        next();
+      }
+    });
+  } else {
+    res.status(401).json({ message: 'no token provided' });
+  }
+}
 
 /***************************************************************************************************
  ********************************************* Endpoints *******************************************
  **************************************************************************************************/
-router.get('/', (req, res, next) => {
+router.get('/', authenticate, (req, res, next) => {
   db.select('display_name')
     .from('users')
     .then(users => res.status(200).send(users))
