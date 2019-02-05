@@ -366,7 +366,7 @@ link: "https://helloworld.com/"
   ]
   ```
 
-* Post `/users/:id/articles` Requires AUTHORIZATION and AUTHENTICATION
+* [x] Post `/users/:id/articles` Requires AUTHORIZATION and AUTHENTICATION
 
 * Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
 * Note: Can only post articles on your own user boards... not other use boards
@@ -548,17 +548,15 @@ count: 1
 
 > Categories
 
-- GET `/categories` Requires AUTHORIZATION
+- [x] GET `/categories` Requires AUTHORIZATION
 
-- GET `/categories/:id` Requires AUTHORIZATION
+- [x] GET `/categories/:id` Requires AUTHORIZATION
 
 - GET `/categories/:id/articles` Requires AUTHORIZATION
 
-- POST `/categories` Requires AUTHORIZATION
+- PUT `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article name owner)
 
-* PUT `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article name owner)
-
-* DELETE `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article
+- DELETE `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article
 
 > /articles <a name="ArticlesEnd"></a>
 
