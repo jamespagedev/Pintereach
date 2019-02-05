@@ -81,7 +81,7 @@ router.get('/:id/articles', authenticate, async (req, res, next) => {
         finalUser.articles[articleI].categories = [];
 
         for (const category of categories) {
-          finalUser.articles[articleI].categories.push(category.id);
+          finalUser.articles[articleI].categories.push(category);
         }
       }
 
