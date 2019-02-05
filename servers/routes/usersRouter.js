@@ -70,24 +70,20 @@ router.get('/:id/articles', authenticate, async (req, res, next) => {
     let user = await db.getUserIdName(req.params.id);
 
     if (user) {
-      articles = await db.getUserArticles(req.params.id);
-      user.articles = articles;
+      user.articles = await db.getUserArticles(req.params.id);
+      let finalUser = await Object.assign({}, user);
 
-      // select categories.id from `articles_categories_relationship` join `categories` on `articles_categories_relationship`.`article_id` = `categories`.`id` where `articles_categories_relationship`.`category_id` = '1'
-
-      let finalUser = Object.assign({}, user);
-
-      user.articles.forEach(async (article, index) => {
-        finalUser.articles[index].categories = [];
-        const newCategories = await dbArticles.getCategoriesByArticleId(
-          article.id
+      for (let articleI = 0; articleI < user.articles.length; articleI++) {
+        categories = await dbArticles.getCategoriesByArticleId(
+          finalUser.articles[articleI].id
         );
-        finalUser.articles[index].categories = newCategories;
-        console.log(newCategories);
-        console.log(finalUser.articles[index].categories);
-      });
-      console.log(finalUser);
-      // console.log(user.articles[0]);
+
+        finalUser.articles[articleI].categories = [];
+
+        for (const category of categories) {
+          finalUser.articles[articleI].categories.push(category.id);
+        }
+      }
 
       res.status(200).json(finalUser);
     } else {
