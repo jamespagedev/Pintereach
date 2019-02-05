@@ -3,7 +3,7 @@
  **************************************************************************************************/
 require('dotenv').config();
 const express = require('express');
-const db = require('../../data/helpers/dbAuthHelper.js');
+const db = require('../../data/helpers/dbAuthHelpers.js');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -88,7 +88,7 @@ router.post('/login', (req, res, next) => {
       // the client password matches the db hash password
       if (user && bcrypt.compareSync(userCreds.password, user.password)) {
         const token = generateToken(user.id, user.username, user.is_admin);
-        res.status(200).json({ message: 'Logged in', token });
+        res.status(200).json({ id: user.id, token });
       } else {
         next({ code: 401 });
       }

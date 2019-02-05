@@ -3,8 +3,9 @@
  **************************************************************************************************/
 require('dotenv').config();
 const express = require('express');
-const db = require('../../data/helpers/dbUsersHelper.js');
+const db = require('../../data/helpers/dbUsersHelpers.js');
 const dbCategories = require('../../data/helpers/dbCategoriesHelpers.js');
+const dbArticles = require('../../data/helpers/dbArticlesHelpers.js');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -35,7 +36,7 @@ function authenticate(req, res, next) {
 
 async function authorization(req, res, next) {
   try {
-    let userInCheck = await db.getUser(req.decodedToken.id);
+    let userInCheck = await db.getUserDetails(req.decodedToken.id);
     if (userInCheck.id === Number(req.params.id) || userInCheck.is_admin) {
       next();
     } else {
@@ -55,14 +56,46 @@ router.get('/', authenticate, (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.get('/:id', authenticate, authorization, (req, res, next) => {
-  db.getUser(req.params.id)
-    .then(user => {
-      res.status(200).send(user);
-    })
-    .catch(err => {
-      next(err);
-    });
+router.get('/:id', authenticate, authorization, async (req, res, next) => {
+  try {
+    const user = await db.getUserDetails(req.params.id);
+    res.status(200).send([user]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:id/articles', authenticate, async (req, res, next) => {
+  try {
+    let user = await db.getUserIdName(req.params.id);
+
+    if (user) {
+      articles = await db.getUserArticles(req.params.id);
+      user.articles = articles;
+
+      // select categories.id from `articles_categories_relationship` join `categories` on `articles_categories_relationship`.`article_id` = `categories`.`id` where `articles_categories_relationship`.`category_id` = '1'
+
+      let finalUser = Object.assign({}, user);
+
+      user.articles.forEach(async (article, index) => {
+        finalUser.articles[index].categories = [];
+        const newCategories = await dbArticles.getCategoriesByArticleId(
+          article.id
+        );
+        finalUser.articles[index].categories = newCategories;
+        console.log(newCategories);
+        console.log(finalUser.articles[index].categories);
+      });
+      console.log(finalUser);
+      // console.log(user.articles[0]);
+
+      res.status(200).json(finalUser);
+    } else {
+      next({ code: 400 });
+    }
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post(
@@ -92,7 +125,7 @@ router.post(
 router.put('/:id', authenticate, authorization, (req, res, next) => {
   let changes = req.body;
 
-  db.getUser(req.params.id)
+  db.getUserDetails(req.params.id)
     .then(users => {
       if (changes.username) {
         changes.username = changes.username.trim();
