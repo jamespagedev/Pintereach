@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
 
     // users reference key
     tbl
-      .integer('users_id')
+      .integer('user_id')
       .unsigned()
       .notNullable()
       .references('id')

@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
 
     // articles reference key
     tbl
-      .integer('articles_id')
+      .integer('article_id')
       .unsigned()
       .notNullable()
       .references('id')
@@ -15,7 +15,7 @@ exports.up = function(knex, Promise) {
 
     // categories reference key
     tbl
-      .integer('categories_id')
+      .integer('category_id')
       .unsigned()
       .notNullable()
       .references('id')
