@@ -32,21 +32,19 @@ function authenticate(req, res, next) {
   }
 }
 
-function authorization() {
-  return function(req, res, next) {
-    user = db
-      .getUser(req.decodedToken.id)
-      .then(users => {
-        if (users[0].id === Number(req.params.id) || users[0].is_admin) {
-          next();
-        } else {
-          res.status(401).end();
-        }
-      })
-      .catch(err => {
-        res.status(500).send(err);
-      });
-  };
+function authorization(req, res, next) {
+  user = db
+    .getUser(req.decodedToken.id)
+    .then(users => {
+      if (users[0].id === Number(req.params.id) || users[0].is_admin) {
+        next();
+      } else {
+        res.status(401).end();
+      }
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
 }
 
 /***************************************************************************************************
@@ -58,17 +56,17 @@ router.get('/', authenticate, (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.get('/:id', authenticate, authorization(), (req, res, next) => {
+router.get('/:id', authenticate, authorization, (req, res) => {
   db.getUser(req.params.id)
     .then(user => {
       res.status(200).send(user);
     })
     .catch(err => {
-      next(err);
+      res.status(500).send(err);
     });
 });
 
-router.put('/:id', authenticate, authorization(), (req, res, next) => {
+router.put('/:id', authenticate, authorization, (req, res, next) => {
   let changes = req.body;
 
   db.getUser(req.params.id)
@@ -104,7 +102,7 @@ router.put('/:id', authenticate, authorization(), (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.delete('/:id', authenticate, authorization(), (req, res, next) => {
+router.delete('/:id', authenticate, authorization, (req, res, next) => {
   db.deleteUser(req.params.id)
     .then(count => {
       // console.log('--- USER ---', user);
