@@ -40,11 +40,11 @@ function authorization() {
         if (users[0].id === Number(req.params.id) || users[0].is_admin) {
           next();
         } else {
-          next({ code: 401 });
+          res.status(401).end();
         }
       })
       .catch(err => {
-        next(err);
+        res.status(500).send(err);
       });
   };
 }
@@ -102,6 +102,29 @@ router.put('/:id', authenticate, authorization(), (req, res, next) => {
         .catch(err => next(err));
     })
     .catch(err => next(err));
+});
+
+router.delete('/:id', authenticate, authorization(), (req, res, next) => {
+  db.deleteUser(req.params.id)
+    .then(count => {
+      // console.log('--- USER ---', user);
+      if (count) {
+        res.status(200).json([
+          {
+            'Users Deleted': count,
+            message: 'user was successfully removed'
+          }
+        ]);
+      } else {
+        res
+          .status(404)
+          .json([{ error: `student with ID '${req.params.id}' not found` }]);
+      }
+    })
+    .catch(err => {
+      // console.log('--- ERR ---', err);
+      next(err);
+    });
 });
 
 /***************************************************************************************************

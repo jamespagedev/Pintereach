@@ -19,7 +19,7 @@ const errorHandler = (err, req, res, next) => {
       });
 
     default:
-      return res.status(500).json({
+      res.status(500).json({
         error: true,
         message: 'There was an error performing the required operation'
       });

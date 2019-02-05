@@ -425,40 +425,38 @@ console.log(response.data)
 
   ```
 
-- DELETE `/users` Requires AUTHORIZATION
+- [x] DELETE `/users/:id` Requires AUTHORIZATION
 
 - Explanation: remove your own user account from the database
-- Note: Can only delete your own user account (not other user accounts)
-- Example1: Send
+- Note: Only SAME USER or ADMIN can delete the user account (not other users)
 
-```
+  - Example: Send
 
-const headersObj = {
-headers: { authorization: token },
-body {
-password: "\$his1sMuchBtter643" // required
-}
-};
+  ```
+  const headersObj = {
+  headers: { authorization: token },
+  body {
+  password: "\$his1sMuchBtter643" // required
+  }
+  };
 
-axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
+  axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
 
-```
+  - example: Receive
 
-- example: Receive
-
-```
-
-[
-{
-count: 1
-}
-]
-
-```
+  ```
+  [
+    {
+      'Users Deleted': 1,
+      message: "user was successfully removed"
+    }
+  ]
+  ```
 
 - DELETE `/users/articles` Requires AUTHORIZATION
 
