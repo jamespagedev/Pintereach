@@ -62,7 +62,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     img_url: "https://i.imgur.com/mACq7e7.jpg" // optional
   }
 
-  axios.post('https://pintereach.herokuapp.com/articles', newUser)
+  axios.post('https://pintereach.herokuapp.com/auth/register', newUser)
     .then(response => {
       console.log(response.data)
     })
@@ -90,7 +90,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     password: "pass123" // required
   }
 
-    axios.post('https://pintereach.herokuapp.com/articles', creds)
+    axios.post('https://pintereach.herokuapp.com/auth/login', creds)
     .then(response => {
       console.log(response.data)
     })
