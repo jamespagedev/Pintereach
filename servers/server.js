@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const server = express();
-// const { errorHandler } = require('../middleware/errorHandler.js');
+const { errorHandler } = require('../middleware/errorHandler.js');
 
 /***************************************************************************************************
  ******************************************** middleware *******************************************
@@ -31,7 +31,7 @@ server.use('/auth', authRouter);
 server.use('/users', usersRouter);
 // server.use('/articles', articlesRouter);
 
-// server.use(errorHandler);
+server.use(errorHandler);
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************

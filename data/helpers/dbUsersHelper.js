@@ -8,7 +8,8 @@ const getUser = id => {
   return db
     .select('id', 'is_admin', 'username', 'display_name', 'email', 'img_url')
     .from('users')
-    .where('id', id);
+    .where('id', id)
+    .first();
 };
 
 const editUser = (id, changes) => {

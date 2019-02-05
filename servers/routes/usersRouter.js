@@ -32,19 +32,17 @@ function authenticate(req, res, next) {
   }
 }
 
-function authorization(req, res, next) {
-  user = db
-    .getUser(req.decodedToken.id)
-    .then(users => {
-      if (users[0].id === Number(req.params.id) || users[0].is_admin) {
-        next();
-      } else {
-        res.status(401).end();
-      }
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
+async function authorization(req, res, next) {
+  try {
+    let userInCheck = await db.getUser(req.decodedToken.id);
+    if (userInCheck.id === Number(req.params.id) || userInCheck.is_admin) {
+      next();
+    } else {
+      next({ code: 401 });
+    }
+  } catch (err) {
+    next(err);
+  }
 }
 
 /***************************************************************************************************
@@ -56,13 +54,13 @@ router.get('/', authenticate, (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.get('/:id', authenticate, authorization, (req, res) => {
+router.get('/:id', authenticate, authorization, (req, res, next) => {
   db.getUser(req.params.id)
     .then(user => {
       res.status(200).send(user);
     })
     .catch(err => {
-      res.status(500).send(err);
+      next(err);
     });
 });
 
