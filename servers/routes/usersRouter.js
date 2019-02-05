@@ -4,6 +4,7 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('../../data/helpers/dbUsersHelper.js');
+const dbCategories = require('../../data/helpers/dbCategoriesHelpers.js');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -64,6 +65,30 @@ router.get('/:id', authenticate, authorization, (req, res, next) => {
     });
 });
 
+router.post(
+  '/:id/categories',
+  authenticate,
+  authorization,
+  async (req, res, next) => {
+    try {
+      category = req.body;
+      category.name = category.name.trim();
+      if (!(category.user_id === Number(req.params.id))) {
+        next({ code: 400 });
+      } else {
+        const ids = await dbCategories.addCategory(category);
+        res.status(201).send([{ id: ids[0] }]);
+      }
+    } catch (err) {
+      if (err.errno === 19) {
+        res.status(400).json({ error: 'category name already taken' });
+      } else {
+        next(err);
+      }
+    }
+  }
+);
+
 router.put('/:id', authenticate, authorization, (req, res, next) => {
   let changes = req.body;
 
@@ -103,7 +128,6 @@ router.put('/:id', authenticate, authorization, (req, res, next) => {
 router.delete('/:id', authenticate, authorization, (req, res, next) => {
   db.deleteUser(req.params.id)
     .then(count => {
-      // console.log('--- USER ---', user);
       if (count) {
         res.status(200).json([
           {
@@ -118,7 +142,6 @@ router.delete('/:id', authenticate, authorization, (req, res, next) => {
       }
     })
     .catch(err => {
-      // console.log('--- ERR ---', err);
       next(err);
     });
 });

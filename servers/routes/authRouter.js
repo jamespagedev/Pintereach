@@ -86,11 +86,8 @@ router.post('/login', (req, res, next) => {
     .then(user => {
       // If user object was obtained AND...
       // the client password matches the db hash password
-      if (
-        user &&
-        bcrypt.compareSync(userCreds.password, user.password, user.is_admin)
-      ) {
-        const token = generateToken(user.id, user.username);
+      if (user && bcrypt.compareSync(userCreds.password, user.password)) {
+        const token = generateToken(user.id, user.username, user.is_admin);
         res.status(200).json({ message: 'Logged in', token });
       } else {
         next({ code: 401 });

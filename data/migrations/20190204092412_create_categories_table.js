@@ -3,6 +3,14 @@ exports.up = function(knex, Promise) {
     // Primary Key 'id'
     tbl.increments();
 
+    // users reference key
+    tbl
+      .integer('user_id')
+      .unsigned()
+      .notNullable()
+      .references('id')
+      .inTable('users');
+
     tbl
       .string('name', 255)
       .notNullable()

@@ -164,104 +164,99 @@ As a researcher, it's difficult to keep track of articles you want to read later
   .catch(err => console.log(err));
   ```
 
-- example: Receive
+  - example: Receive
 
 ```
-
 [
-{
-id: 1,
-username: "jamespage",
-display_name: "RandomBlogger",
-email: "jp@email.com",
-img_url: "https://i.imgur.com/mACq7e7.jpg"
-}
+  {
+    id: 1,
+    username: "jamespage",
+    display_name: "RandomBlogger",
+    email: "jp@email.com",
+    img_url: "https://i.imgur.com/mACq7e7.jpg"
+  }
 ]
-
 ```
 
 - GET `/users/articles`
 
 - Explanation: Returns a list of all users with all their articles
-- Example: Send
+
+  - Example: Send
+
+  ```
+  axios.get(`https://pintereach.herokuapp.com/users/articles`)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+  - example: Receive
 
 ```
-
-axios.get(`https://pintereach.herokuapp.com/users/articles`)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
 [
-{
-id: 1,
-display_name: "RandomBlogger", // will use username if display_name is blank
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/",
-},
-{
-id: 3,
-category: "Education"
-cover_page: "index.html",
-title: "",
-link: "https://lambdaschool.com/",
-}
+  {
+    id: 1,
+    display_name: "RandomBlogger", // will use username if display_name is blank
+    articles: [
+      {
+        id: 1,
+        category: "General"
+        cover_page: "HelloWorld.png",
+        title: "Hello World",
+        link: "https://helloworld.com/"
+      },
+      {
+        id: 3,
+        category: "Education"
+        cover_page: "index.html",
+        title: "",
+        link: "https://lambdaschool.com/"
+      }
+    ]
+  },
+  {
+    id: 2,
+    display_name: "catperson", // will use username if display_name is blank
+    articles: [
+      {
+        id: 1,
+        category: "General"
+        cover_page: "HelloWorld.png",
+        title: "Hello World",
+        link: "https://helloworld.com/"
+      },
+      {
+        id: 2,
+        category: "Other"
+        cover_page: "Front.txt",
+        title: "Random Article",
+        link: ""
+      }
+    ]
+  },
+  {
+    id: 3,
+    display_name: "reader" // will use username if display_name is blank
+    articles: [
+      {
+        id: 1,
+        category: "General"
+        cover_page: "HelloWorld.png",
+        title: "Hello World",
+        link: "https://helloworld.com/"
+      },
+      {
+        id: 3,
+        category: "Education"
+        cover_page: "index.html",
+        title: "",
+        link: "https://lambdaschool.com/"
+      }
+    ]
+  }
 ]
-},
-{
-id: 2,
-display_name: "catperson", // will use username if display_name is blank
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/",
-},
-{
-id: 2,
-category: "Other"
-cover_page: "Front.txt",
-title: "Random Article",
-link: "",
-}
-]
-},
-{
-id: 3,
-display_name: "reader" // will use username if display_name is blank
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/",
-},
-{
-id: 3,
-category: "Education"
-cover_page: "index.html",
-title: "",
-link: "https://lambdaschool.com/",
-}
-]
-}
-]
-
 ```
 
 - GET `/users/:id/articles`
@@ -343,36 +338,65 @@ link: "https://helloworld.com/"
 
 ```
 
-- Post `/users/articles` Requires AUTHORIZATION
+- Post `/users/:id/categories` Requires AUTHORIZATION and AUTHENTICATION
 
-- Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
-- Note: Can only post articles on your own user boards... not other use boards
-- Example1: Send
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    body: {
+      user_id: 1,
+      name: "General"
+    }
+  };
 
-```
+  axios.delete(`https://pintereach.herokuapp.com/users/articles/${1}`, headersObj)
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(err => console.log(err));
+  ```
 
-const headersObj = {
-headers: { authorization: token },
-body: {
-articlesIds: [1, 3]
-}
-]
-}
-};
+  - Example: Received
 
-axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
+  ```
+  [
+    {
+        "id": 1
+    }
+  ]
+  ```
 
-```
+* Post `/users/:id/articles` Requires AUTHORIZATION and AUTHENTICATION
 
-- [x] PUT `/users/:id` Requires AUTHORIZATION
+* Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
+* Note: Can only post articles on your own user boards... not other use boards
 
-- Explanation: edit a user key/value pairs (including password)
-- Note: Only SAME USER or ADMIN can change the user attributes (not other users)
-- Note2: DO NOT include `is_admin` property in the `headersObj`, or it will set it to false.
+  - Example1: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    body: {
+      "user_id": 1,
+      "user_id": 1,
+      "user_id": 1,
+      "user_id": 1,
+      "article_ids": [ 2, 3] // array of article id's
+    }
+  };
+
+  axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
+  .then(response => {
+    console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+* [x] PUT `/users/:id` Requires AUTHORIZATION
+
+* Explanation: edit a user key/value pairs (including password)
+* Note: Only SAME USER or ADMIN can change the user attributes (not other users)
+* Note2: DO NOT include `is_admin` property in the `headersObj`, or it will set it to false.
 
   - Example1: Send
 
@@ -425,10 +449,10 @@ console.log(response.data)
 
   ```
 
-- [x] DELETE `/users/:id` Requires AUTHORIZATION
+* [x] DELETE `/users/:id` Requires AUTHORIZATION
 
-- Explanation: remove your own user account from the database
-- Note: Only SAME USER or ADMIN can delete the user account (not other users)
+* Explanation: remove your own user account from the database
+* Note: Only SAME USER or ADMIN can delete the user account (not other users)
 
   - Example: Send
 
@@ -458,11 +482,11 @@ console.log(response.data)
   ]
   ```
 
-- DELETE `/users/articles` Requires AUTHORIZATION
+* DELETE `/users/articles` Requires AUTHORIZATION
 
-- Explanation: remove all articles from the user board
-- Note: Can only delete the articles on your own user board (not articles on other user boards)
-- Example1: Send
+* Explanation: remove all articles from the user board
+* Note: Can only delete the articles on your own user board (not articles on other user boards)
+* Example1: Send
 
 ```
 
@@ -521,6 +545,20 @@ count: 1
 ]
 
 ```
+
+> Categories
+
+- GET `/categories` Requires AUTHORIZATION
+
+- GET `/categories/:id` Requires AUTHORIZATION
+
+- GET `/categories/:id/articles` Requires AUTHORIZATION
+
+- POST `/categories` Requires AUTHORIZATION
+
+* PUT `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article name owner)
+
+* DELETE `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article
 
 > /articles <a name="ArticlesEnd"></a>
 
@@ -831,10 +869,11 @@ count: 1
 
 ## categories
 
-| Field | Data Type                  |
-| ----- | -------------------------- |
-| id    | Int (auto increment)       |
-| name  | String (Required) (Unique) |
+| Field   | Data Type                  |
+| ------- | -------------------------- |
+| id      | Int (auto increment)       |
+| user_id | Int (Required) (Unique)    |
+| name    | String (Required) (Unique) |
 
 ## articles_categories_relationship
 
