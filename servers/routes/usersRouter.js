@@ -55,7 +55,7 @@ async function authorization(req, res, next) {
 async function isUserAndAdmin(req, res, next) {
   try {
     let userInCheck = await db.getUserDetails(req.decodedToken.id);
-    if (userInCheck.id === Number(req.params.userId) || userInCheck.is_admin) {
+    if (userInCheck.id === Number(req.params.userid) || userInCheck.is_admin) {
       next();
     } else {
       next({ code: 401 });
@@ -161,7 +161,7 @@ router.post('/articles', authenticate, async (req, res, next) => {
         }
       });
 
-    // query article
+    // add article
     const results = await dbArticles.addArticle(article);
     const article_id = results[0];
 
