@@ -1,6 +1,12 @@
 const db = require('../dbConfig.js');
 const dbRelationship = require('./dbRelationshipHelpers.js');
 
+const getArticle = article_id => {
+  return db('articles')
+    .where('id', article_id)
+    .first();
+};
+
 const getCategoriesByArticleId = articleId => {
   // select categories.id from `articles_categories_relationship` join `categories` on `articles_categories_relationship`.`article_id` = `categories`.`id` where `articles_categories_relationship`.`category_id` = '1'
   return db
@@ -30,6 +36,12 @@ const addArticle = article => {
   return db('articles').insert(article);
 };
 
+const updateArticle = (id, changes) => {
+  return db('articles')
+    .where('id', id)
+    .update(changes);
+};
+
 const deleteArticle = async article_id => {
   const articleToCategoryIds = await dbRelationship.deleteArticleToCategories(
     article_id
@@ -41,7 +53,9 @@ const deleteArticle = async article_id => {
 };
 
 module.exports = {
+  getArticle,
   getCategoriesByArticleId,
   addArticle,
+  updateArticle,
   deleteArticle
 };

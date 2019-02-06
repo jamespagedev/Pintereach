@@ -255,7 +255,70 @@ router.put(
   authenticate,
   isUserAndAdmin,
   async (req, res, next) => {
-    res.status(200).send('success');
+    try {
+      // needs at least 1 (cover_page OR title OR link)
+      if (!req.body.cover_page && !req.body.title && !req.body.link) {
+        throw { code: 400 };
+      }
+
+      // create modified article object for query
+      let changes = { user_id: Number(req.decodedToken.id) };
+      req.body.cover_page;
+      if (req.body.cover_page) changes.cover_page = req.body.cover_page;
+      if (req.body.title) changes.title = req.body.title;
+      if (req.body.link) changes.link = req.body.link;
+
+      const article = await dbArticles.getArticle(req.params.id);
+      const count = await dbArticles.updateArticle(req.params.id, changes);
+
+      // check for duplicate articles
+      db.getUserArticles(req.decodedToken.id)
+        .then(response => {
+          let articleExists = response.some(articleInCheck => {
+            if (
+              (req.body.title &&
+                articleInCheck.title.toLowerCase() ===
+                  req.body.title.toLowerCase()) ||
+              (req.body.link &&
+                articleInCheck.link.toLowerCase() ===
+                  req.body.link.toLowerCase()) ||
+              (req.body.cover_page &&
+                articleInCheck.cover_page.toLowerCase() ===
+                  req.body.cover_page.toLowerCase())
+            )
+              return true;
+            return false;
+          });
+          console.log('articleExists', articleExists);
+          if (articleExists) throw { errno: 19 };
+        })
+        .catch(err => {
+          if (err.errno == 19) {
+            res
+              .status(400)
+              .json({ error: 'article cover_page/title/link already taken' });
+          } else {
+            next(err);
+          }
+        });
+
+      res.status(200).json([
+        article,
+        changes,
+        {
+          articlesChanged: count,
+          message: `Article with id '${req.params.id}' was successfully changed`
+        }
+      ]);
+    } catch (err) {
+      if (err.errno === 19) {
+        res
+          .status(400)
+          .json({ error: 'article cover_page/title/link already taken' });
+      } else {
+        next(err);
+      }
+    }
   }
 );
 
