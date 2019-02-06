@@ -14,10 +14,24 @@ const getCategoriesByArticleId = articleId => {
 };
 
 const addArticle = async article => {
-  const doesExist = await db('articles')
-    .where(db.raw('LOWER("cover_page") = ?', article.cover_page.toLowerCase()))
-    .orWhere(db.raw('LOWER("title") = ?', article.title.toLowerCase()))
-    .orWhere(db.raw('LOWER("link") = ?', article.link.toLowerCase()))
+  let doesExist;
+
+  doesExist = await db('articles')
+    .where(
+      db
+        .raw('LOWER("cover_page") = ?', article.cover_page.toLowerCase())
+        .whereNot('cover_page', '')
+    )
+    .orWhere(
+      db
+        .raw('LOWER("title") = ?', article.title.toLowerCase())
+        .andWhereNot('title', '')
+    )
+    .orWhere(
+      db
+        .raw('LOWER("link") = ?', article.link.toLowerCase())
+        .andWhereNot('link', '')
+    )
     .first();
   if (doesExist) {
     throw { errno: 19 };

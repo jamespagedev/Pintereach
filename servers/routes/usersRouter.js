@@ -110,18 +110,24 @@ router.get('/:id/articles', authenticate, async (req, res, next) => {
 
 router.post('/:id/articles', authenticate, isUser, async (req, res, next) => {
   try {
-    let article = Object.assign(
-      { user_id: Number(req.params.id) },
-      {
-        cover_page: req.body.cover_page,
-        title: req.body.title,
-        link: req.body.link
-      }
-    );
+    // needs at least 1 (cover_page OR title OR link)
+    if (!req.body.cover_page && !req.body.title && !req.body.link) {
+      throw { code: 400 };
+    }
 
+    // create modified article object for query
+    let article = { user_id: Number(req.params.id) };
+    req.body.cover_page
+      ? (article.cover_page = req.body.cover_page)
+      : (article.cover_page = '');
+    req.body.title ? (article.title = req.body.title) : (article.title = '');
+    req.body.link ? (article.link = req.body.link) : (article.link = '');
+
+    // query article
     const results = await dbArticles.addArticle(article);
     const article_id = results[0];
 
+    // if categories were given, add the row(s) to the relational table
     if (req.body.category_ids) {
       const category_ids = req.body.category_ids.slice();
       for (let i = 0; i < category_ids.length; i++) {
