@@ -35,6 +35,10 @@ function authenticate(req, res, next) {
   }
 }
 
+/*  Difference between authorization and isUserAndAdmin...
+    authorization - checks to see if the user id in the endpoint link is the same as the user id on the token
+    isUserAndAdmin - checks to see if the user id in the token is equal to the userId (alias for user_id in the database table)
+*/
 async function authorization(req, res, next) {
   try {
     let userInCheck = await db.getUserDetails(req.decodedToken.id);
@@ -305,6 +309,9 @@ router.delete(
     }
   }
 );
+
+// Delete Category
+// router.delete('/u')
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************

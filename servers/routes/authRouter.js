@@ -23,7 +23,7 @@ function generateToken(id, username, isAdmin) {
     'Should configure local .env file for secretString'; // hard coding this in the code is bad practice
 
   const options = {
-    expiresIn: 60 * 30 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
+    expiresIn: '24h' // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
   };
 
   return jwt.sign(payload, secret, options);
