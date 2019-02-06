@@ -192,153 +192,85 @@ As a researcher, it's difficult to keep track of articles you want to read later
   .catch(err => console.log(err));
   ```
 
+- [x] GET `/users/:id/articles`
+
+- Explanation: Returns a single user with all articles
+
+  - Example: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token }
+  };
+
+  axios.get(`https://pintereach.herokuapp.com/users/${1}/articles`, headersObj)
+  .then(response => {
+    console.log(response.data)
+  })
+  .catch(err => console.log(err));
+
+  ```
+
   - example: Receive
 
-```
-[
+  ```
   {
-    id: 1,
-    display_name: "RandomBlogger", // will use username if display_name is blank
-    articles: [
+    "id": 1,
+    "display_name": "RandomBlogger",
+    "articles": [
       {
-        id: 1,
-        category: "General"
-        cover_page: "HelloWorld.png",
-        title: "Hello World",
-        link: "https://helloworld.com/"
+          "id": 1,
+          "user_id": 1,
+          "cover_page": "https://coverpage1.com/",
+          "title": "Hello World",
+          "link": "https://helloworld.com/",
+          "categories": [
+              {
+                  "id": 1,
+                  "name": "General"
+              },
+              {
+                  "id": 3,
+                  "name": "Other"
+              }
+          ]
       },
       {
-        id: 3,
-        category: "Education"
-        cover_page: "index.html",
-        title: "",
-        link: "https://lambdaschool.com/"
-      }
-    ]
-  },
-  {
-    id: 2,
-    display_name: "catperson", // will use username if display_name is blank
-    articles: [
-      {
-        id: 1,
-        category: "General"
-        cover_page: "HelloWorld.png",
-        title: "Hello World",
-        link: "https://helloworld.com/"
+          "id": 2,
+          "user_id": 1,
+          "cover_page": "https://i.imgur.com/zbg9mtf.png",
+          "title": "Lambda Strikes Down Students With New Build Week",
+          "link": "",
+          "categories": [
+              {
+                  "id": 2,
+                  "name": "Lambda Times"
+              }
+          ]
       },
       {
-        id: 2,
-        category: "Other"
-        cover_page: "Front.txt",
-        title: "Random Article",
-        link: ""
-      }
-    ]
-  },
-  {
-    id: 3,
-    display_name: "reader" // will use username if display_name is blank
-    articles: [
-      {
-        id: 1,
-        category: "General"
-        cover_page: "HelloWorld.png",
-        title: "Hello World",
-        link: "https://helloworld.com/"
-      },
-      {
-        id: 3,
-        category: "Education"
-        cover_page: "index.html",
-        title: "",
-        link: "https://lambdaschool.com/"
+          "id": 3,
+          "user_id": 1,
+          "cover_page": "",
+          "title": "Deadlines — Bad reason for bad code.",
+          "link": "https://medium.com/mindorks/deadlines-bad-reason-for-bad-code-d3d5fe22f3ff",
+          "categories": [
+              {
+                  "id": 1,
+                  "name": "General"
+              }
+          ]
       }
     ]
   }
-]
-```
-
-- GET `/users/:id/articles`
-
-- Explanation: Returns a single user with all articles
-- Example: Send
-
-```
-
-axios.get(`https://pintereach.herokuapp.com/users/${2}/articles`)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-id: 2,
-display_name: "catperson",
-articles: [
-{
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/"
-},
-{
-id: 3,
-category: "Education"
-cover_page: "index.html",
-title: "",
-link: "https://lambdaschool.com/"
-}
-]
-}
-]
-
-```
+  ```
 
 - GET `/users/:userId/articles/:articleId`
-
 - Explanation: Returns a single user with a sincle article
-- Example: Send
 
-```
+- [x] Post `/users/:id/categories` Requires AUTHORIZATION and AUTHENTICATION
 
-axios.get(`https://pintereach.herokuapp.com/users/${2}/articles/${1}`)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
-
-```
-
-- example: Receive
-
-```
-
-[
-{
-id: 2,
-display_name: "catperson",
-article: {
-id: 1,
-category: "General"
-cover_page: "HelloWorld.png",
-title: "Hello World",
-link: "https://helloworld.com/"
-}
-}
-]
-
-```
-
-- Post `/users/:id/categories` Requires AUTHORIZATION and AUTHENTICATION
+  - Example: Send
 
   ```
   const headersObj = {
@@ -366,10 +298,10 @@ link: "https://helloworld.com/"
   ]
   ```
 
-* [x] Post `/users/articles` Requires AUTHORIZATION
+- [x] Post `/users/articles` Requires AUTHORIZATION
 
-* Explanation: add article to your user board
-* Rule: Can only post articles on your own user boards... not other use boards (this includes admins)
+- Explanation: add article to your user board
+- Rule: Can only post articles on your own user boards... not other use boards (this includes admins)
 
   - Example1: Send
 
@@ -551,8 +483,33 @@ link: "https://helloworld.com/"
 - PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
 - Rule: Only admins can edit categories
 
-- DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+- [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
 - Rule: Only admins can delete categories
+
+  - Example: Send
+
+  ```
+  const headersObj = {
+  headers: { authorization: token }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/categories/${:id}`, headersObj)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+  - Example: Receive
+
+  ```
+  [
+    {
+        "categoriesDeleted": 1,
+        "message": "Category was successfully removed"
+    }
+  ]
+  ```
 
 # Table Schema <a name="TableSchema"></a>
 
