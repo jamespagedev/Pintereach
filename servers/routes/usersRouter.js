@@ -6,6 +6,7 @@ const express = require('express');
 const db = require('../../data/helpers/dbUsersHelpers.js');
 const dbCategories = require('../../data/helpers/dbCategoriesHelpers.js');
 const dbArticles = require('../../data/helpers/dbArticlesHelpers.js');
+const dbRelationships = require('../../data/helpers/dbRelationshipHelpers.js');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -38,6 +39,19 @@ async function authorization(req, res, next) {
   try {
     let userInCheck = await db.getUserDetails(req.decodedToken.id);
     if (userInCheck.id === Number(req.params.id) || userInCheck.is_admin) {
+      next();
+    } else {
+      next({ code: 401 });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function isUser(req, res, next) {
+  try {
+    let userInCheck = await db.getUserDetails(req.decodedToken.id);
+    if (userInCheck.id === Number(req.params.id)) {
       next();
     } else {
       next({ code: 401 });
@@ -91,6 +105,41 @@ router.get('/:id/articles', authenticate, async (req, res, next) => {
     }
   } catch (err) {
     next(err);
+  }
+});
+
+router.post('/:id/articles', authenticate, isUser, async (req, res, next) => {
+  try {
+    let article = Object.assign(
+      { user_id: Number(req.params.id) },
+      {
+        cover_page: req.body.cover_page,
+        title: req.body.title,
+        link: req.body.link
+      }
+    );
+
+    const results = await dbArticles.addArticle(article);
+    const article_id = results[0];
+
+    if (req.body.category_ids) {
+      const category_ids = req.body.category_ids.slice();
+      for (let i = 0; i < category_ids.length; i++) {
+        await dbRelationships.addArticleToCategories({
+          article_id: article_id,
+          category_id: category_ids[i]
+        });
+      }
+    }
+    res.status(201).json([{ id: article_id }]);
+  } catch (err) {
+    if (err.errno === 19) {
+      res
+        .status(400)
+        .json({ error: 'article cover_page/title/link already taken' });
+    } else {
+      next(err);
+    }
   }
 });
 

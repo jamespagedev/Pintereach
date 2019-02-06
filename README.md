@@ -368,8 +368,8 @@ link: "https://helloworld.com/"
 
 * [x] Post `/users/:id/articles` Requires AUTHORIZATION and AUTHENTICATION
 
-* Explanation: Add multiple articles to your user board (does not create a new article, for that, use Post `/articles`)
-* Note: Can only post articles on your own user boards... not other use boards
+* Explanation: add article to your user board
+* Rule: Can only post articles on your own user boards... not other use boards (this includes admins)
 
   - Example1: Send
 
@@ -377,11 +377,29 @@ link: "https://helloworld.com/"
   const headersObj = {
     headers: { authorization: token },
     body: {
-      "user_id": 1,
-      "user_id": 1,
-      "user_id": 1,
-      "user_id": 1,
-      "article_ids": [ 2, 3] // array of article id's
+      "cover_page": "https://coverpage1.com/", // optional
+      "title": "Hello World", // optional
+      "link": "https://helloworld.com/", // optional
+      "category_ids": [ 1, 3 ] // optional
+    }
+  };
+
+  axios.post(`https://pintereach.herokuapp.com/users/${1}/articles`, headersObj)
+  .then(response => {
+    console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+  - Example2: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    body: {
+      "cover_page": "",
+      "title": "Deadlines — Bad reason for bad code.",
+      "link": "https://medium.com/mindorks/deadlines-bad-reason-for-bad-code-d3d5fe22f3ff"
     }
   };
 
