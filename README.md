@@ -366,7 +366,7 @@ link: "https://helloworld.com/"
   ]
   ```
 
-* [x] Post `/users/:id/articles` Requires AUTHORIZATION and AUTHENTICATION
+* [x] Post `/users/articles` Requires AUTHORIZATION
 
 * Explanation: add article to your user board
 * Rule: Can only post articles on your own user boards... not other use boards (this includes admins)

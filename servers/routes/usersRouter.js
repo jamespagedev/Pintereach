@@ -126,17 +126,24 @@ router.post('/articles', authenticate, async (req, res, next) => {
     // check for duplicate articles
     db.getUserArticles(req.decodedToken.id)
       .then(response => {
-        let articleExists = response.some(article => {
+        let articleExists = response.some(articleInCheck => {
           if (
-            article.title.toLowerCase() === req.body.title.toLowerCase() ||
-            article.link.toLowerCase() === req.body.link.toLowerCase() ||
-            article.cover_page.toLowerCase() ===
-              req.body.cover_page.toLowerCase()
+            ((req.body.title &&
+              articleInCheck.title.toLowerCase() ===
+                req.body.title.toLowerCase()) ||
+              (req.body.link &&
+                articleInCheck.link.toLowerCase() ===
+                  req.body.link.toLowerCase()) ||
+              (req.body.cover_page &&
+                articleInCheck.cover_page.toLowerCase() ===
+                  req.body.cover_page.toLowerCase())) &&
+            articleInCheck.user_id === req.decodedToken.id
           )
             return true;
           return false;
         });
         console.log('--- articleExists ---:', articleExists);
+        if (articleExists) throw { errno: 19 };
       })
       .catch(err => {
         if (err.errno == 19) {
