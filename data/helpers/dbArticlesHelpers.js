@@ -1,4 +1,5 @@
 const db = require('../dbConfig.js');
+const dbRelationship = require('./dbRelationshipHelpers.js');
 
 const getCategoriesByArticleId = articleId => {
   // select categories.id from `articles_categories_relationship` join `categories` on `articles_categories_relationship`.`article_id` = `categories`.`id` where `articles_categories_relationship`.`category_id` = '1'
@@ -13,7 +14,7 @@ const getCategoriesByArticleId = articleId => {
     .where('articles_categories_relationship.category_id', articleId);
 };
 
-const addArticle = async article => {
+const addArticle = article => {
   /*  These sql commands work on SQLiteStudio,
       but I was not able to get them to work with knex methods...
       `select * from 'articles' where LOWER("cover_page") = ? AND "cover_page" != "" AND "user_id" = ?`
@@ -29,7 +30,18 @@ const addArticle = async article => {
   return db('articles').insert(article);
 };
 
+const deleteArticle = async article_id => {
+  const articleToCategoryIds = await dbRelationship.deleteArticleToCategories(
+    article_id
+  );
+
+  return await db('articles')
+    .where('id', article_id)
+    .del();
+};
+
 module.exports = {
   getCategoriesByArticleId,
-  addArticle
+  addArticle,
+  deleteArticle
 };

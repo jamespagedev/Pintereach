@@ -48,10 +48,23 @@ async function authorization(req, res, next) {
   }
 }
 
-async function isUser(req, res, next) {
+async function isUserAndAdmin(req, res, next) {
   try {
     let userInCheck = await db.getUserDetails(req.decodedToken.id);
-    if (userInCheck.id === Number(req.params.id)) {
+    if (userInCheck.id === Number(req.params.userId) || userInCheck.is_admin) {
+      next();
+    } else {
+      next({ code: 401 });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function isAdmin(req, res, next) {
+  try {
+    let userInCheck = await db.getUserDetails(req.decodedToken.is_admin);
+    if (userInCheck.is_admin) {
       next();
     } else {
       next({ code: 401 });
@@ -142,7 +155,6 @@ router.post('/articles', authenticate, async (req, res, next) => {
             return true;
           return false;
         });
-        console.log('--- articleExists ---:', articleExists);
         if (articleExists) throw { errno: 19 };
       })
       .catch(err => {
@@ -241,6 +253,7 @@ router.put('/:id', authenticate, authorization, (req, res, next) => {
     .catch(err => next(err));
 });
 
+// Delete User
 router.delete('/:id', authenticate, authorization, (req, res, next) => {
   db.deleteUser(req.params.id)
     .then(count => {
@@ -261,6 +274,37 @@ router.delete('/:id', authenticate, authorization, (req, res, next) => {
       next(err);
     });
 });
+
+// Delete User Article
+router.delete(
+  '/:userId/articles/:id',
+  authenticate,
+  isUserAndAdmin,
+  async (req, res, next) => {
+    try {
+      // const count = await dbArticles.deleteArticle(req.params.id);
+      const count = await dbArticles.deleteArticle(req.params.id);
+      console.log('count = ', count);
+      if (count > 0) {
+        res.status(200).json([
+          {
+            articlesDeleted: count,
+            message: 'Article was successfully removed'
+          }
+        ]);
+      } else {
+        res.status(404).json([
+          {
+            error: 404,
+            message: `The article with id ${req.params.id} was not found`
+          }
+        ]);
+      }
+    } catch (err) {
+      next(500);
+    }
+  }
+);
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************
