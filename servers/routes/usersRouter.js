@@ -65,19 +65,6 @@ async function isUserAndAdmin(req, res, next) {
   }
 }
 
-async function isAdmin(req, res, next) {
-  try {
-    let userInCheck = await db.getUserDetails(req.decodedToken.is_admin);
-    if (userInCheck.is_admin) {
-      next();
-    } else {
-      next({ code: 401 });
-    }
-  } catch (err) {
-    next(err);
-  }
-}
-
 /***************************************************************************************************
  ********************************************* Endpoints *******************************************
  **************************************************************************************************/
@@ -286,9 +273,7 @@ router.delete(
   isUserAndAdmin,
   async (req, res, next) => {
     try {
-      // const count = await dbArticles.deleteArticle(req.params.id);
       const count = await dbArticles.deleteArticle(req.params.id);
-      console.log('count = ', count);
       if (count > 0) {
         res.status(200).json([
           {
@@ -309,9 +294,6 @@ router.delete(
     }
   }
 );
-
-// Delete Category
-// router.delete('/u')
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************

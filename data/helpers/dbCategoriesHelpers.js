@@ -1,4 +1,5 @@
 const db = require('../dbConfig.js');
+const dbRelationship = require('../helpers/dbRelationshipHelpers.js');
 
 const getCategories = () => {
   return db.select('name').from('categories');
@@ -22,8 +23,19 @@ const addCategory = async category => {
   return db('categories').insert(category);
 };
 
+const deleteCategory = async category_id => {
+  const countDeleted = await dbRelationship.deleteCategoryToArticles(
+    category_id
+  );
+
+  return await db('categories')
+    .where('id', category_id)
+    .del();
+};
+
 module.exports = {
   getCategories,
   getCategory,
-  addCategory
+  addCategory,
+  deleteCategory
 };

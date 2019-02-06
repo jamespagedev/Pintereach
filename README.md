@@ -477,10 +477,10 @@ link: "https://helloworld.com/"
 
   ```
 
-* [x] DELETE `/users/:id` Requires AUTHORIZATION
+- [x] DELETE `/users/:id` Requires AUTHORIZATION
 
-* Explanation: remove your own user account from the database
-* Note: Only SAME USER or ADMIN can delete the user account (not other users)
+- Explanation: remove your own user account from the database
+- Note: Only SAME USER or ADMIN can delete the user account (not other users)
 
   - Example: Send
 
@@ -510,37 +510,35 @@ link: "https://helloworld.com/"
   ]
   ```
 
-- DELETE `/users/articles/:id` Requires AUTHORIZATION
+* [x] DELETE `/users/:userId/articles/:id'` Requires AUTHORIZATION
 
-- Explanation: remove a single article from the user board
-- Note: Can only delete your own user account (not articles on other user boards)
-- Example1: Send
+* Explanation: remove a single article from the user board
+* Note: Can only delete an article belonging to your own user account (unless you are admin)
 
-```
+  - Example: Send
 
-const headersObj = {
-headers: { authorization: token }
-};
+  ```
+  const headersObj = {
+  headers: { authorization: token }
+  };
 
-axios.delete(`https://pintereach.herokuapp.com/users/articles/${1}`, headersObj)
-.then(response => {
-console.log(response.data)
-})
-.catch(err => console.log(err));
+  axios.delete(`https://pintereach.herokuapp.com/users/${userId}/articles/${articleId}`, headersObj)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
 
-```
+  - example: Receive
 
-- example: Receive
-
-```
-
-[
-{
-count: 1
-}
-]
-
-```
+  ```
+  [
+      {
+          "articlesDeleted": 1,
+          "message": "Article was successfully removed"
+      }
+  ]
+  ```
 
 > Categories
 
@@ -550,9 +548,11 @@ count: 1
 
 - GET `/categories/:id/articles` Requires AUTHORIZATION
 
-- PUT `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article name owner)
+- PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+- Rule: Only admins can edit categories
 
-- DELETE `/categories` Requires AUTHORIZATION and AUTHENTICATION (Must be admin, or article
+- DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+- Rule: Only admins can delete categories
 
 # Table Schema <a name="TableSchema"></a>
 

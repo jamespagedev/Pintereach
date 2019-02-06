@@ -31,6 +31,18 @@ function authenticate(req, res, next) {
   }
 }
 
+async function isAdmin(req, res, next) {
+  try {
+    if (req.decodedToken.is_admin) {
+      next();
+    } else {
+      next({ code: 403 });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
 /***************************************************************************************************
  ********************************************* Endpoints *******************************************
  **************************************************************************************************/
@@ -52,6 +64,30 @@ router.get('/:id', authenticate, async (req, res, next) => {
     res.status(200).send(category);
   } catch (err) {
     next(err);
+  }
+});
+
+// Delete Category
+router.delete('/:id', authenticate, isAdmin, async (req, res, next) => {
+  try {
+    const count = await db.deleteCategory(req.params.id);
+    if (count > 0) {
+      res.status(200).json([
+        {
+          categoriesDeleted: count,
+          message: 'Category was successfully removed'
+        }
+      ]);
+    } else {
+      res.status(404).json([
+        {
+          error: 404,
+          message: `The category with id ${req.params.id} was not found`
+        }
+      ]);
+    }
+  } catch (err) {
+    next(500);
   }
 });
 

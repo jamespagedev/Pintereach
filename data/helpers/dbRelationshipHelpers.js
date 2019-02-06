@@ -10,7 +10,14 @@ const deleteArticleToCategories = article_id => {
     .del();
 };
 
+const deleteCategoryToArticles = category_id => {
+  return db('articles_categories_relationship')
+    .where('category_id', category_id)
+    .del();
+};
+
 module.exports = {
   addArticleToCategories,
-  deleteArticleToCategories
+  deleteArticleToCategories,
+  deleteCategoryToArticles
 };
