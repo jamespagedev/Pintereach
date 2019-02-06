@@ -14,28 +14,18 @@ const getCategoriesByArticleId = articleId => {
 };
 
 const addArticle = async article => {
-  let doesExist;
+  /*  These sql commands work on SQLiteStudio,
+      but I was not able to get them to work with knex methods...
+      `select * from 'articles' where LOWER("cover_page") = ? AND "cover_page" != "" AND "user_id" = ?`
+      OR
+      `select * from 'articles' where LOWER("title") = ? AND "title" != "" AND "user_id" = ?`
+      OR
+      `select * from 'articles' where LOWER("link") = ? AND "link" != "" AND "user_id" = ?`
 
-  doesExist = await db('articles')
-    .where(
-      db
-        .raw('LOWER("cover_page") = ?', article.cover_page.toLowerCase())
-        .whereNot('cover_page', '')
-    )
-    .orWhere(
-      db
-        .raw('LOWER("title") = ?', article.title.toLowerCase())
-        .andWhereNot('title', '')
-    )
-    .orWhere(
-      db
-        .raw('LOWER("link") = ?', article.link.toLowerCase())
-        .andWhereNot('link', '')
-    )
-    .first();
-  if (doesExist) {
-    throw { errno: 19 };
-  }
+      ... so instead, I am using javascript to validate
+      the input before calling this method.
+      (See '// check for duplicate articles' on file usersRouter.js)
+  */
   return db('articles').insert(article);
 };
 

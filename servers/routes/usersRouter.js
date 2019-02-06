@@ -108,7 +108,7 @@ router.get('/:id/articles', authenticate, async (req, res, next) => {
   }
 });
 
-router.post('/:id/articles', authenticate, isUser, async (req, res, next) => {
+router.post('/articles', authenticate, async (req, res, next) => {
   try {
     // needs at least 1 (cover_page OR title OR link)
     if (!req.body.cover_page && !req.body.title && !req.body.link) {
@@ -116,12 +116,37 @@ router.post('/:id/articles', authenticate, isUser, async (req, res, next) => {
     }
 
     // create modified article object for query
-    let article = { user_id: Number(req.params.id) };
+    let article = { user_id: Number(req.decodedToken.id) };
     req.body.cover_page
       ? (article.cover_page = req.body.cover_page)
       : (article.cover_page = '');
     req.body.title ? (article.title = req.body.title) : (article.title = '');
     req.body.link ? (article.link = req.body.link) : (article.link = '');
+
+    // check for duplicate articles
+    db.getUserArticles(req.decodedToken.id)
+      .then(response => {
+        let articleExists = response.some(article => {
+          if (
+            article.title.toLowerCase() === req.body.title.toLowerCase() ||
+            article.link.toLowerCase() === req.body.link.toLowerCase() ||
+            article.cover_page.toLowerCase() ===
+              req.body.cover_page.toLowerCase()
+          )
+            return true;
+          return false;
+        });
+        console.log('--- articleExists ---:', articleExists);
+      })
+      .catch(err => {
+        if (err.errno == 19) {
+          res
+            .status(400)
+            .json({ error: 'article cover_page/title/link already taken' });
+        } else {
+          next(err);
+        }
+      });
 
     // query article
     const results = await dbArticles.addArticle(article);
