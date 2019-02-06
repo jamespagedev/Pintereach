@@ -5,8 +5,8 @@
 - [Project Summary](#ProjectSummary)
 - [/Endpoints (For Frontend Usage)](#FrontEnd)
   - [Auth](#AuthEnd)
-  - [Articles](#ArticlesEnd)
   - [Users](#UsersEnd)
+  - [Categories](#CategoriesEnd)
 - [Table Schema](#TableSchema)
 - [Project Scores 1/2/3](#Rubrics)
 
@@ -472,7 +472,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-> Categories
+> Categories <a name="CategoriesEnd"></a>
 
 - [x] GET `/categories` Requires AUTHORIZATION
 
