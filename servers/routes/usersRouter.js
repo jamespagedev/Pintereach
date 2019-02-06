@@ -116,76 +116,75 @@ router.get('/:id/articles', authenticate, async (req, res, next) => {
 
 // Creates article for user
 router.post('/articles', authenticate, async (req, res, next) => {
-  res.status(201).send('success');
-  // try {
-  //   // needs at least 1 (cover_page OR title OR link)
-  //   if (!req.body.cover_page && !req.body.title && !req.body.link) {
-  //     throw { code: 400 };
-  //   }
+  try {
+    // needs at least 1 (cover_page OR title OR link)
+    if (!req.body.cover_page && !req.body.title && !req.body.link) {
+      throw { code: 400 };
+    }
 
-  //   // create modified article object for query
-  //   let article = { user_id: Number(req.decodedToken.id) };
-  //   req.body.cover_page
-  //     ? (article.cover_page = req.body.cover_page)
-  //     : (article.cover_page = '');
-  //   req.body.title ? (article.title = req.body.title) : (article.title = '');
-  //   req.body.link ? (article.link = req.body.link) : (article.link = '');
+    // create modified article object for query
+    let article = { user_id: Number(req.decodedToken.id) };
+    req.body.cover_page
+      ? (article.cover_page = req.body.cover_page)
+      : (article.cover_page = '');
+    req.body.title ? (article.title = req.body.title) : (article.title = '');
+    req.body.link ? (article.link = req.body.link) : (article.link = '');
 
-  //   // check for duplicate articles
-  //   db.getUserArticles(req.decodedToken.id)
-  //     .then(response => {
-  //       let articleExists = response.some(articleInCheck => {
-  //         if (
-  //           ((req.body.title &&
-  //             articleInCheck.title.toLowerCase() ===
-  //               req.body.title.toLowerCase()) ||
-  //             (req.body.link &&
-  //               articleInCheck.link.toLowerCase() ===
-  //                 req.body.link.toLowerCase()) ||
-  //             (req.body.cover_page &&
-  //               articleInCheck.cover_page.toLowerCase() ===
-  //                 req.body.cover_page.toLowerCase())) &&
-  //           articleInCheck.user_id === req.decodedToken.id
-  //         )
-  //           return true;
-  //         return false;
-  //       });
-  //       if (articleExists) throw { errno: 19 };
-  //     })
-  //     .catch(err => {
-  //       if (err.errno == 19) {
-  //         res
-  //           .status(400)
-  //           .json({ error: 'article cover_page/title/link already taken' });
-  //       } else {
-  //         next(err);
-  //       }
-  //     });
+    // check for duplicate articles
+    db.getUserArticles(req.decodedToken.id)
+      .then(response => {
+        let articleExists = response.some(articleInCheck => {
+          if (
+            ((req.body.title &&
+              articleInCheck.title.toLowerCase() ===
+                req.body.title.toLowerCase()) ||
+              (req.body.link &&
+                articleInCheck.link.toLowerCase() ===
+                  req.body.link.toLowerCase()) ||
+              (req.body.cover_page &&
+                articleInCheck.cover_page.toLowerCase() ===
+                  req.body.cover_page.toLowerCase())) &&
+            articleInCheck.user_id === req.decodedToken.id
+          )
+            return true;
+          return false;
+        });
+        if (articleExists) throw { errno: 19 };
+      })
+      .catch(err => {
+        if (err.errno == 19) {
+          res
+            .status(400)
+            .json({ error: 'article cover_page/title/link already taken' });
+        } else {
+          next(err);
+        }
+      });
 
-  //   // query article
-  //   const results = await dbArticles.addArticle(article);
-  //   const article_id = results[0];
+    // query article
+    const results = await dbArticles.addArticle(article);
+    const article_id = results[0];
 
-  //   // if categories were given, add the row(s) to the relational table
-  //   if (req.body.category_ids) {
-  //     const category_ids = req.body.category_ids.slice();
-  //     for (let i = 0; i < category_ids.length; i++) {
-  //       await dbRelationships.addArticleToCategories({
-  //         article_id: article_id,
-  //         category_id: category_ids[i]
-  //       });
-  //     }
-  //   }
-  //   res.status(201).json([{ id: article_id }]);
-  // } catch (err) {
-  //   if (err.errno === 19) {
-  //     res
-  //       .status(400)
-  //       .json({ error: 'article cover_page/title/link already taken' });
-  //   } else {
-  //     next(err);
-  //   }
-  // }
+    // if categories were given, add the row(s) to the relational table
+    if (req.body.category_ids) {
+      const category_ids = req.body.category_ids.slice();
+      for (let i = 0; i < category_ids.length; i++) {
+        await dbRelationships.addArticleToCategories({
+          article_id: article_id,
+          category_id: category_ids[i]
+        });
+      }
+    }
+    res.status(201).json([{ id: article_id }]);
+  } catch (err) {
+    if (err.errno === 19) {
+      res
+        .status(400)
+        .json({ error: 'article cover_page/title/link already taken' });
+    } else {
+      next(err);
+    }
+  }
 });
 
 // Creates category
