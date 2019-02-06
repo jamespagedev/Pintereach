@@ -283,7 +283,7 @@ router.delete('/:id', authenticate, authorization, (req, res, next) => {
 
 // Delete User Article
 router.delete(
-  '/:userId/articles/:id',
+  '/:userid/articles/:id',
   authenticate,
   isUserAndAdmin,
   async (req, res, next) => {
