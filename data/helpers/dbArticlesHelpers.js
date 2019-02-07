@@ -15,7 +15,7 @@ const getCategoriesByArticleId = articleId => {
     .innerJoin(
       'categories',
       'articles_categories_relationship.article_id',
-      'categories.id'
+      'categories.category_id'
     )
     .where('articles_categories_relationship.category_id', articleId);
 };

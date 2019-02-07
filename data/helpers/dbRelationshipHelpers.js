@@ -1,6 +1,7 @@
 const db = require('../dbConfig.js');
 
 const addArticleToCategories = relationship => {
+  console.log(relationship);
   return db('articles_categories_relationship').insert(relationship);
 };
 

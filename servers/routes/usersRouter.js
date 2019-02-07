@@ -87,28 +87,25 @@ router.get('/:id', authenticate, authorization, async (req, res, next) => {
 // Gets a list of articles belonging to users
 router.get('/:id/articles', authenticate, async (req, res, next) => {
   try {
-    let user = await db.getUserIdName(req.params.id);
+    categories = await dbArticles.getCategoriesByArticleId(4);
 
-    if (user) {
-      user.articles = await db.getUserArticles(req.params.id);
-      let finalUser = await Object.assign({}, user);
-
-      for (let articleI = 0; articleI < user.articles.length; articleI++) {
-        categories = await dbArticles.getCategoriesByArticleId(
-          finalUser.articles[articleI].id
-        );
-
-        finalUser.articles[articleI].categories = [];
-
-        for (const category of categories) {
-          finalUser.articles[articleI].categories.push(category);
-        }
-      }
-
-      res.status(200).json(finalUser);
-    } else {
-      next({ code: 400 });
-    }
+    // let user = await db.getUserIdName(req.params.id);
+    // if (user) {
+    //   user.articles = await db.getUserArticles(req.params.id);
+    //   let finalUser = await Object.assign({}, user);
+    //   for (let articleI = 0; articleI < user.articles.length; articleI++) {
+    //     categories = await dbArticles.getCategoriesByArticleId(1);
+    //     console.log(finalUser.articles[articleI].id);
+    //     console.log(categories);
+    //     finalUser.articles[articleI].categories = [];
+    //     for (const category of categories) {
+    //       finalUser.articles[articleI].categories.push(category);
+    //     }
+    //   }
+    res.status(200).json(categories);
+    // } else {
+    //   next({ code: 400 });
+    // }
   } catch (err) {
     next(err);
   }
@@ -270,7 +267,7 @@ router.put(
 
       const article = await dbArticles.getArticle(req.params.id);
 
-      // check for duplicate articles
+      // check for duplicate articles for this user
       const userArticles = await db.getUserArticles(req.decodedToken.id);
 
       for (const articleInCheck of userArticles) {
@@ -290,13 +287,28 @@ router.put(
       }
 
       // update article
-      const count = await dbArticles.updateArticle(req.params.id, changes);
+      const aCount = await dbArticles.updateArticle(req.params.id, changes);
+      let rCount;
+      // update the relationship (if given)
+      if (req.body.category_ids) {
+        rCount = await dbRelationships.deleteArticleToCategories(
+          Number(req.params.id)
+        );
+        for (let i = 0; i < req.body.category_ids.length; i++) {
+          await dbRelationships.addArticleToCategories({
+            article_id: article.id,
+            category_id: req.body.category_ids[i]
+          });
+        }
+      }
 
+      // everything passed, send the results
       res.status(200).json([
         article,
         changes,
         {
-          articlesChanged: count,
+          articlesChanged: aCount,
+          categoriesChange: rCount,
           message: `Article with id '${req.params.id}' was successfully changed`
         }
       ]);
