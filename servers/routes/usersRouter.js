@@ -87,25 +87,23 @@ router.get('/:id', authenticate, authorization, async (req, res, next) => {
 // Gets a list of articles belonging to users
 router.get('/:id/articles', authenticate, async (req, res, next) => {
   try {
-    categories = await dbArticles.getCategoriesByArticleId(4);
-
-    // let user = await db.getUserIdName(req.params.id);
-    // if (user) {
-    //   user.articles = await db.getUserArticles(req.params.id);
-    //   let finalUser = await Object.assign({}, user);
-    //   for (let articleI = 0; articleI < user.articles.length; articleI++) {
-    //     categories = await dbArticles.getCategoriesByArticleId(1);
-    //     console.log(finalUser.articles[articleI].id);
-    //     console.log(categories);
-    //     finalUser.articles[articleI].categories = [];
-    //     for (const category of categories) {
-    //       finalUser.articles[articleI].categories.push(category);
-    //     }
-    //   }
-    res.status(200).json(categories);
-    // } else {
-    //   next({ code: 400 });
-    // }
+    let user = await db.getUserIdName(req.params.id);
+    if (user) {
+      user.articles = await db.getUserArticles(req.params.id);
+      let finalUser = await Object.assign({}, user);
+      for (let articleI = 0; articleI < user.articles.length; articleI++) {
+        categories = await dbArticles.getCategoriesByArticleId(
+          finalUser.articles[articleI].id
+        );
+        finalUser.articles[articleI].categories = [];
+        for (const category of categories) {
+          finalUser.articles[articleI].categories.push(category);
+        }
+      }
+      res.status(200).json(finalUser);
+    } else {
+      next({ code: 400 });
+    }
   } catch (err) {
     next(err);
   }
@@ -265,8 +263,6 @@ router.put(
       if (req.body.title) changes.title = req.body.title;
       if (req.body.link) changes.link = req.body.link;
 
-      const article = await dbArticles.getArticle(req.params.id);
-
       // check for duplicate articles for this user
       const userArticles = await db.getUserArticles(req.decodedToken.id);
 
@@ -281,7 +277,7 @@ router.put(
             (req.body.cover_page &&
               articleInCheck.cover_page.toLowerCase() ===
                 req.body.cover_page.toLowerCase())) &&
-          article.id !== req.body.id
+          articleInCheck.id !== Number(req.params.id)
         )
           throw { errno: 19 };
       }
@@ -296,7 +292,7 @@ router.put(
         );
         for (let i = 0; i < req.body.category_ids.length; i++) {
           await dbRelationships.addArticleToCategories({
-            article_id: article.id,
+            article_id: Number(req.params.id),
             category_id: req.body.category_ids[i]
           });
         }
@@ -304,12 +300,12 @@ router.put(
 
       // everything passed, send the results
       res.status(200).json([
-        article,
-        changes,
         {
           articlesChanged: aCount,
           categoriesChange: rCount,
-          message: `Article with id '${req.params.id}' was successfully changed`
+          message: `Article/Categories with id '${
+            req.params.id
+          }' was successfully changed`
         }
       ]);
     } catch (err) {

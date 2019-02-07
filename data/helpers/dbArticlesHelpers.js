@@ -13,11 +13,16 @@ const getCategoriesByArticleId = articleId => {
     .select('categories.id', 'categories.name')
     .from('articles_categories_relationship')
     .innerJoin(
-      'categories',
-      'articles_categories_relationship.article_id',
-      'categories.category_id'
+      'articles',
+      'articles.id',
+      'articles_categories_relationship.article_id'
     )
-    .where('articles_categories_relationship.category_id', articleId);
+    .innerJoin(
+      'categories',
+      'categories.id',
+      'articles_categories_relationship.category_id'
+    )
+    .where('articles_categories_relationship.article_id', articleId);
 };
 
 const addArticle = article => {
