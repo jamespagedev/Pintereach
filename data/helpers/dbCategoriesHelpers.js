@@ -23,6 +23,19 @@ const addCategory = async category => {
   return db('categories').insert(category);
 };
 
+const updateCategory = async (id, changes) => {
+  const doesExist = await db('categories')
+    .whereRaw('LOWER(name) = ?', changes.name.toLowerCase())
+    .andWhereNot('id', id)
+    .first();
+  if (doesExist) {
+    throw { errno: 19 };
+  }
+  return db('categories')
+    .where('id', id)
+    .update(changes);
+};
+
 const deleteCategory = async category_id => {
   const countDeleted = await dbRelationship.deleteCategoryToArticles(
     category_id
@@ -37,5 +50,6 @@ module.exports = {
   getCategories,
   getCategory,
   addCategory,
+  updateCategory,
   deleteCategory
 };

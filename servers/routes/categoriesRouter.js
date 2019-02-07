@@ -67,6 +67,36 @@ router.get('/:id', authenticate, async (req, res, next) => {
   }
 });
 
+router.put('/:id', async (req, res, next) => {
+  const changes = req.body;
+  try {
+    changes.id = Number(req.params.id);
+    req.body.name
+      ? (changes.name = req.body.name.trim())
+      : function() {
+          throw { code: 400 };
+        };
+    const count = await db.updateCategory(changes.id, changes);
+    res.status(200).json([
+      {
+        categoriesChange: count,
+        message: `Category name '${changes.name}' with id '${
+          changes.id
+        }' was successfully changed`
+      }
+    ]);
+  } catch (err) {
+    if (err.errno === 19) {
+      res.status(400).json({
+        error: 400,
+        message: `Category name '${changes.name}' already taken`
+      });
+    } else {
+      next(err);
+    }
+  }
+});
+
 // Delete Category
 router.delete('/:id', authenticate, isAdmin, async (req, res, next) => {
   try {

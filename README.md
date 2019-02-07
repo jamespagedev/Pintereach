@@ -515,6 +515,18 @@ As a researcher, it's difficult to keep track of articles you want to read later
 - PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
 - Rule: Only admins can edit categories
 
+  - Example: Send
+
+  ```
+  will fill in later...
+  ```
+
+  - Example: Receive
+
+  ```
+  will fill in later...
+  ```
+
 - [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
 - Rule: Only admins can delete categories
 
@@ -605,7 +617,7 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 
 1. Student did not build a CRUD API with all of the required endpoints, or the endpoints that exist don't work
 2. Student built a CRUD API using Node and Express, code is clean and organized.
-3. Student built a CRUD API using Node and Express, code is clean and organized. Student organized code using a patern similar to MVC, the usage of Routes and controllers and middleware is present and property incorperated throughout the project's backend
+3. [x] Student built a CRUD API using Node and Express, code is clean and organized. Student organized code using a patern similar to MVC, the usage of Routes and controllers and middleware is present and property incorperated throughout the project's backend
 
 - Data model is normalized
 
@@ -622,7 +634,7 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 - Project has automated testing suites covering Endpoints and Business Logic
 
 1. The solution does not have any automated testing in place.
-2. The core business logic is tested using unit tests.
+2. [x] The core business logic is tested using unit tests.
 3. The project has unit and integration tests that include end to end testing using a test database.
 
 - API is deployed to the web
