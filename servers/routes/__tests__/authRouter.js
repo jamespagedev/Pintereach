@@ -1,5 +1,4 @@
 const request = require('supertest');
-const authRouter = require('../authRouter.js');
 const server = require('../../server.js');
 
 describe('authRouter.js', () => {
