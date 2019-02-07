@@ -285,7 +285,7 @@ router.put(
       // update article
       const aCount = await dbArticles.updateArticle(req.params.id, changes);
       let rCount;
-      // update the relationship (if given)
+      // update the categories (if given)
       if (req.body.category_ids) {
         rCount = await dbRelationships.deleteArticleToCategories(
           Number(req.params.id)

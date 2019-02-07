@@ -414,13 +414,33 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  will fill in later...
+  const headersObj = {
+    headers: { authorization: token },
+    data: {
+      cover_page: "Test2",
+      title: "Test2",
+      link: "Test2",
+      category_ids: [1, 3]
+    }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/users/${UserID}/articles/${ArticleID}`, headersObj)
+  .then(response => {
+    console.log(response.data)
+  })
+  .catch(err => console.log(err));
   ```
 
   - Example: Receive
 
   ```
-  will fill in later...
+  [
+    {
+        "articlesChanged": 1,
+        "categoriesChange": 2,
+        "message": "Article/Categories with id '10' was successfully changed"
+    }
+  ]
   ```
 
 - [x] DELETE `/users/:id` Requires AUTHORIZATION
@@ -432,10 +452,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   const headersObj = {
-  headers: { authorization: token },
-  body {
-  password: "\$his1sMuchBtter643" // required
-  }
+    headers: { authorization: token },
+    data: {
+      password: "\$his1sMuchBtter643" // required
+    }
   };
 
   axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)

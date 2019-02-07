@@ -88,7 +88,7 @@ router.post('/login', (req, res, next) => {
       // the client password matches the db hash password
       if (user && bcrypt.compareSync(userCreds.password, user.password)) {
         const token = generateToken(user.id, user.username, user.is_admin);
-        res.status(200).json({ id: user.id, token });
+        res.status(201).json({ id: user.id, token });
       } else {
         next({ code: 401 });
       }
