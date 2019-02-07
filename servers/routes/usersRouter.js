@@ -269,38 +269,28 @@ router.put(
       if (req.body.link) changes.link = req.body.link;
 
       const article = await dbArticles.getArticle(req.params.id);
-      const count = await dbArticles.updateArticle(req.params.id, changes);
 
       // check for duplicate articles
-      db.getUserArticles(req.decodedToken.id)
-        .then(response => {
-          let articleExists = response.some(articleInCheck => {
-            if (
-              (req.body.title &&
-                articleInCheck.title.toLowerCase() ===
-                  req.body.title.toLowerCase()) ||
-              (req.body.link &&
-                articleInCheck.link.toLowerCase() ===
-                  req.body.link.toLowerCase()) ||
-              (req.body.cover_page &&
-                articleInCheck.cover_page.toLowerCase() ===
-                  req.body.cover_page.toLowerCase())
-            )
-              return true;
-            return false;
-          });
-          console.log('articleExists', articleExists);
-          if (articleExists) throw { errno: 19 };
-        })
-        .catch(err => {
-          if (err.errno == 19) {
-            res
-              .status(400)
-              .json({ error: 'article cover_page/title/link already taken' });
-          } else {
-            next(err);
-          }
-        });
+      const userArticles = await db.getUserArticles(req.decodedToken.id);
+
+      for (const articleInCheck of userArticles) {
+        if (
+          ((req.body.title &&
+            articleInCheck.title.toLowerCase() ===
+              req.body.title.toLowerCase()) ||
+            (req.body.link &&
+              articleInCheck.link.toLowerCase() ===
+                req.body.link.toLowerCase()) ||
+            (req.body.cover_page &&
+              articleInCheck.cover_page.toLowerCase() ===
+                req.body.cover_page.toLowerCase())) &&
+          article.id !== req.body.id
+        )
+          throw { errno: 19 };
+      }
+
+      // update article
+      const count = await dbArticles.updateArticle(req.params.id, changes);
 
       res.status(200).json([
         article,

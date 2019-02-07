@@ -265,9 +265,6 @@ As a researcher, it's difficult to keep track of articles you want to read later
   }
   ```
 
-- GET `/users/:userId/articles/:articleId`
-- Explanation: Returns a single user with a sincle article
-
 - [x] Post `/users/:id/categories` Requires AUTHORIZATION and AUTHENTICATION
 
   - Example: Send
@@ -409,6 +406,23 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
 
+- [x] PUT `/users/:userid/articles/:id` Requires AUTHORIZATION
+
+- Explanation: edits the article that belongs to the user
+- Rule: You must be the owner of the article or an admin to edit it
+
+  - Example: Send
+
+  ```
+  will fill in later...
+  ```
+
+  - Example: Receive
+
+  ```
+  will fill in later...
+  ```
+
 - [x] DELETE `/users/:id` Requires AUTHORIZATION
 
 - Explanation: remove your own user account from the database
@@ -442,7 +456,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-* [x] DELETE `/users/:userId/articles/:id'` Requires AUTHORIZATION
+* [x] DELETE `/users/:userid/articles/:id'` Requires AUTHORIZATION
 
 * Explanation: remove a single article from the user board
 * Note: Can only delete an article belonging to your own user account (unless you are admin)
@@ -477,8 +491,6 @@ As a researcher, it's difficult to keep track of articles you want to read later
 - [x] GET `/categories` Requires AUTHORIZATION
 
 - [x] GET `/categories/:id` Requires AUTHORIZATION
-
-- GET `/categories/:id/articles` Requires AUTHORIZATION
 
 - PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
 - Rule: Only admins can edit categories
