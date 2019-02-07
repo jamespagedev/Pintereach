@@ -512,19 +512,35 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 - [x] GET `/categories/:id` Requires AUTHORIZATION
 
-- PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+- [x] PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
 - Rule: Only admins can edit categories
 
   - Example: Send
 
   ```
-  will fill in later...
+  const headersObj = {
+  headers: { authorization: token },
+  data: {
+    "name": "Change name here"
+  }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/categories/${id}`, headersObj)
+  .then(response => {
+  console.log(response.data)
+  })
+  .catch(err => console.log(err));
   ```
 
   - Example: Receive
 
   ```
-  will fill in later...
+  [
+    {
+        "categoriesChange": 1,
+        "message": "Category name 'Change name here' with id '3' was successfully changed"
+    }
+  ]
   ```
 
 - [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
@@ -603,7 +619,7 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 
 1. Student did not achieve all of the MVP features of the project.
 2. Student's work demonstrates that all MVP features were built
-3. Student's work demonstrates that all MVP features were built and the student went above and beyond the project.
+3. [x] Student's work demonstrates that all MVP features were built and the student went above and beyond the project.
 
 - Team contribution
 
