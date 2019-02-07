@@ -38,8 +38,10 @@ router.post('/register', (req, res, next) => {
 
   // no trailing spaces for unique properties
   newUserCreds.username = newUserCreds.username.trim();
-  newUserCreds.display_name = newUserCreds.username.trim();
-  newUserCreds.email = newUserCreds.username.trim();
+  req.body.display_name
+    ? (newUserCreds.display_name = newUserCreds.display_name.trim())
+    : (newUserCreds.display_name = newUserCreds.username.trim());
+  if (req.body.email) newUserCreds.email = newUserCreds.email.trim();
 
   // only the database administrator can set this this value
   if (newUserCreds.is_admin) {

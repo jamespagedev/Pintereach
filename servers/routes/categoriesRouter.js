@@ -102,7 +102,7 @@ router.delete('/:id', authenticate, isAdmin, async (req, res, next) => {
   try {
     const count = await db.deleteCategory(req.params.id);
     if (count > 0) {
-      res.status(200).json([
+      res.status(202).json([
         {
           categoriesDeleted: count,
           message: 'Category was successfully removed'

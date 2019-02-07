@@ -4,6 +4,7 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('../../data/helpers/dbUsersHelpers.js');
+const dbAuth = require('../../data/helpers/dbAuthHelpers.js');
 const dbCategories = require('../../data/helpers/dbCategoriesHelpers.js');
 const dbArticles = require('../../data/helpers/dbArticlesHelpers.js');
 const dbRelationships = require('../../data/helpers/dbRelationshipHelpers.js');
@@ -35,9 +36,9 @@ function authenticate(req, res, next) {
   }
 }
 
-/*  Difference between authorization and isUserAndAdmin...
+/*  Difference between authorization and isUserOrAdmin...
     authorization - checks to see if the user id in the endpoint link is the same as the user id on the token
-    isUserAndAdmin - checks to see if the user id in the token is equal to the userId (alias for user_id in the database table)
+    isUserOrAdmin - checks to see if the user id in the token is equal to the userId (alias for user_id in the database table)
 */
 async function authorization(req, res, next) {
   try {
@@ -52,13 +53,34 @@ async function authorization(req, res, next) {
   }
 }
 
-async function isUserAndAdmin(req, res, next) {
+async function isUserOrAdmin(req, res, next) {
   try {
     let userInCheck = await db.getUserDetails(req.decodedToken.id);
     if (userInCheck.id === Number(req.params.userid) || userInCheck.is_admin) {
       next();
     } else {
       next({ code: 401 });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function verifyPasswordIfNotAdmin(req, res, next) {
+  try {
+    if (!req.decodedToken.is_admin) {
+      const user = await dbAuth.findByID(Number(req.params.id));
+      /*  If user object was obtained AND...
+        the client password (re-hashed)...
+        matches the hash password in the db
+    */
+      if (user && bcrypt.compareSync(req.body.password, user.password)) {
+        next();
+      } else {
+        throw { code: 400 };
+      }
+    } else {
+      next();
     }
   } catch (err) {
     next(err);
@@ -78,7 +100,9 @@ router.get('/', authenticate, (req, res, next) => {
 router.get('/:id', authenticate, authorization, async (req, res, next) => {
   try {
     const user = await db.getUserDetails(req.params.id);
-    res.status(200).send([user]);
+    req.decodedToken.is_admin
+      ? res.status(200).send([user])
+      : (delete user.is_admin, res.status(200).send([user]));
   } catch (err) {
     next(err);
   }
@@ -212,7 +236,7 @@ router.put('/:id', authenticate, authorization, (req, res, next) => {
   let changes = req.body;
 
   db.getUserDetails(req.params.id)
-    .then(users => {
+    .then(user => {
       if (changes.username) {
         changes.username = changes.username.trim();
       }
@@ -226,12 +250,12 @@ router.put('/:id', authenticate, authorization, (req, res, next) => {
         changes.password = bcrypt.hashSync(changes.password, 12);
       }
 
-      // only the database administrator can set this this value
+      // only the database administrator can set this this value locally
       if (changes.is_admin) {
         changes.is_admin = false;
       }
 
-      db.editUser(users[0].id, changes)
+      db.editUser(user.id, changes)
         .then(response => {
           res
             .status(200)
@@ -248,7 +272,7 @@ router.put('/:id', authenticate, authorization, (req, res, next) => {
 router.put(
   '/:userid/articles/:id',
   authenticate,
-  isUserAndAdmin,
+  isUserOrAdmin,
   async (req, res, next) => {
     try {
       // needs at least 1 (cover_page OR title OR link)
@@ -283,14 +307,23 @@ router.put(
       }
 
       // update article
-      const aCount = await dbArticles.updateArticle(req.params.id, changes);
-      let rCount;
+      const numOfarticlesChanged = await dbArticles.updateArticle(
+        req.params.id,
+        changes
+      );
+
       // update the categories (if given)
+      let numOfCategoriesRemoved = 0;
+      let numOfcategoriesAdded = 0;
       if (req.body.category_ids) {
-        rCount = await dbRelationships.deleteArticleToCategories(
+        numOfCategoriesRemoved = await dbRelationships.deleteArticleToCategories(
           Number(req.params.id)
         );
-        for (let i = 0; i < req.body.category_ids.length; i++) {
+        for (
+          let i = 0;
+          i < req.body.category_ids.length;
+          i++, numOfcategoriesAdded++
+        ) {
           await dbRelationships.addArticleToCategories({
             article_id: Number(req.params.id),
             category_id: req.body.category_ids[i]
@@ -301,8 +334,9 @@ router.put(
       // everything passed, send the results
       res.status(200).json([
         {
-          articlesChanged: aCount,
-          categoriesChange: rCount,
+          numOfarticlesChanged: numOfarticlesChanged,
+          numOfCategoriesRemoved: numOfCategoriesRemoved,
+          numOfcategoriesAdded: numOfcategoriesAdded,
           message: `Article/Categories with id '${
             req.params.id
           }' was successfully changed`
@@ -321,37 +355,43 @@ router.put(
 );
 
 // Delete User
-router.delete('/:id', authenticate, authorization, (req, res, next) => {
-  db.deleteUser(req.params.id)
-    .then(count => {
-      if (count) {
-        res.status(200).json([
-          {
-            'Users Deleted': count,
-            message: 'user was successfully removed'
-          }
-        ]);
-      } else {
-        res
-          .status(404)
-          .json([{ error: `student with ID '${req.params.id}' not found` }]);
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
-});
+router.delete(
+  '/:id',
+  authenticate,
+  authorization,
+  verifyPasswordIfNotAdmin,
+  (req, res, next) => {
+    db.deleteUser(req.params.id)
+      .then(count => {
+        if (count) {
+          res.status(202).json([
+            {
+              'Users Deleted': count,
+              message: 'user was successfully removed'
+            }
+          ]);
+        } else {
+          res
+            .status(404)
+            .json([{ error: `student with ID '${req.params.id}' not found` }]);
+        }
+      })
+      .catch(err => {
+        next(err);
+      });
+  }
+);
 
 // Delete User Article
 router.delete(
   '/:userid/articles/:id',
   authenticate,
-  isUserAndAdmin,
+  isUserOrAdmin,
   async (req, res, next) => {
     try {
       const count = await dbArticles.deleteArticle(req.params.id);
       if (count > 0) {
-        res.status(200).json([
+        res.status(202).json([
           {
             articlesDeleted: count,
             message: 'Article was successfully removed'

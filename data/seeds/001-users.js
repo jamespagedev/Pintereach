@@ -28,9 +28,7 @@ exports.seed = function(knex, Promise) {
           username: 'reader',
           is_admin: false,
           display_name: 'reader',
-          password: bcrypt.hashSync('reader123', 12),
-          email: '',
-          img_url: ''
+          password: bcrypt.hashSync('reader123', 12)
         }
       ]);
     });

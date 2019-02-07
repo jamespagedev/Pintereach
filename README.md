@@ -14,7 +14,7 @@
 
 - [App Deployment](https://pintereach.herokuapp.com/)
 - [policies and procedures](https://www.notion.so/Policies-and-Procedures-19e679fc1a284b668d8132dd8d7228cd)
-- [Checklist](https://www.notion.so/Build-week-Schedule-and-Daily-Milestones-7f0aca2ad598459fa4492fdac9881d5b)
+- [Build week Schedule and Daily Milestones](https://www.notion.so/Build-week-Schedule-and-Daily-Milestones-7f0aca2ad598459fa4492fdac9881d5b)
 - [Rubric](https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3rAGQ/edit#gid=0) (Also see "Project Scores 1/2/3" below)
 - [List of Projects](https://lambdaschool.monday.com/boards/165411499/)
 
@@ -76,7 +76,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       id: 1,
-      token: "$g0w34t0a@*s*2S(aegn329g"
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYW1lc3BhZ2UyIiwiaWF0IjoxNTQ5NTU5MDU0LCJleHAiOjE1NDk2NDU0NTR9.7nb3JixZBBFJy9583qRMuteylu60dkVKJFFY99v0Qcg"
     }
   ]
   ```
@@ -91,7 +91,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
     password: "pass123" // required
   }
 
-    axios.post('https://pintereach.herokuapp.com/auth/login', creds)
+  axios.post('https://pintereach.herokuapp.com/auth/login', creds)
     .then(response => {
       console.log(response.data)
     })
@@ -104,7 +104,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
   [
     {
       message: "Logged in",
-      token: "$adfg9324rt$@!&asdgfh92fdsa2"
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYW1lc3BhZ2UyIiwiaXNfYWRtaW4iOjAsImlhdCI6MTU0OTU1OTEzMSwiZXhwIjoxNTQ5NjQ1NTMxfQ.29FwqKW_0ETCpNiSrwV1U5lSUHdlf3nfoFtp_-wbyiM"
     }
   ]
   ```
@@ -112,8 +112,8 @@ As a researcher, it's difficult to keep track of articles you want to read later
 > /users <a name="UsersEnd"></a>
 
 - [x] GET `/users` Requires AUTHORIZATION
+- Explanation: returns all users
 
-  - Explanation: returns all users
   - Example: Send
 
   ```
@@ -149,8 +149,9 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 - [x] GET `/users/:id` Require AUTHORIZATION AND AUTHENTICATION(admin and/or self-user only)
 
-  - Explanation: returns single user
-  - Rule: User is only able to view user attributes if they belong to user logged in. Admin can view user attributes of any user.
+- Explanation: returns single user
+- Rule: User is only able to view user attributes if they belong to user logged in. Admin can view user attributes of any user.
+
   - Example: Send
 
   ```
@@ -159,38 +160,39 @@ As a researcher, it's difficult to keep track of articles you want to read later
   };
 
   axios.get(`https://pintereach.herokuapp.com/users/${1}`)
-  .then(response => {
-  console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
-  - example: Receive
-
-```
-[
-  {
-    id: 1,
-    username: "jamespage",
-    display_name: "RandomBlogger",
-    email: "jp@email.com",
-    img_url: "https://i.imgur.com/mACq7e7.jpg"
-  }
-]
-```
-
-- GET `/users/articles`
-
-- Explanation: Returns a list of all users with all their articles
-
-  - Example: Send
+  - Example1: Receive (if not admin)
 
   ```
-  axios.get(`https://pintereach.herokuapp.com/users/articles`)
-  .then(response => {
-  console.log(response.data)
-  })
-  .catch(err => console.log(err));
+  [
+    {
+        "id": 3,
+        "username": "reader",
+        "display_name": "reader",
+        "email": null,
+        "img_url": null
+    }
+  ]
+  ```
+
+  - Example2: Receive (if admin)
+
+  ```
+  [
+    {
+      "id": 4,
+      "is_admin": 0,
+      "username": "jamespage2",
+      "display_name": "RandomBlogger2",
+      "email": null,
+      "img_url": null
+    }
+  ]
   ```
 
 - [x] GET `/users/:id/articles`
@@ -205,10 +207,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
   };
 
   axios.get(`https://pintereach.herokuapp.com/users/${1}/articles`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
 
   ```
 
@@ -220,105 +222,75 @@ As a researcher, it's difficult to keep track of articles you want to read later
     "display_name": "RandomBlogger",
     "articles": [
       {
-          "id": 1,
-          "user_id": 1,
-          "cover_page": "https://coverpage1.com/",
-          "title": "Hello World",
-          "link": "https://helloworld.com/",
-          "categories": [
-              {
-                  "id": 1,
-                  "name": "General"
-              },
-              {
-                  "id": 3,
-                  "name": "Other"
-              }
-          ]
+        "id": 1,
+        "user_id": 1,
+        "cover_page": "https://coverpage1.com/",
+        "title": "Hello World",
+        "link": "https://helloworld.com/",
+        "categories": [
+          {
+            "id": 1,
+            "name": "General"
+          },
+          {
+            "id": 3,
+            "name": "Other"
+          }
+        ]
       },
       {
-          "id": 2,
-          "user_id": 1,
-          "cover_page": "https://i.imgur.com/zbg9mtf.png",
-          "title": "Lambda Strikes Down Students With New Build Week",
-          "link": "",
-          "categories": [
-              {
-                  "id": 2,
-                  "name": "Lambda Times"
-              }
-          ]
+        "id": 2,
+        "user_id": 1,
+        "cover_page": "https://i.imgur.com/zbg9mtf.png",
+        "title": "Lambda Strikes Down Students With New Build Week",
+        "link": "",
+        "categories": [
+          {
+            "id": 2,
+            "name": "Lambda Times"
+          }
+        ]
       },
       {
-          "id": 3,
-          "user_id": 1,
-          "cover_page": "",
-          "title": "Deadlines — Bad reason for bad code.",
-          "link": "https://medium.com/mindorks/deadlines-bad-reason-for-bad-code-d3d5fe22f3ff",
-          "categories": [
-              {
-                  "id": 1,
-                  "name": "General"
-              }
-          ]
+        "id": 3,
+        "user_id": 1,
+        "cover_page": "",
+        "title": "Deadlines — Bad reason for bad code.",
+        "link": "https://medium.com/mindorks/deadlines-bad-reason-for-bad-code-d3d5fe22f3ff",
+        "categories": [
+          {
+            "id": 1,
+            "name": "General"
+          }
+        ]
       }
     ]
   }
   ```
 
-- [x] Post `/users/:id/categories` Requires AUTHORIZATION and AUTHENTICATION
-
-  - Example: Send
-
-  ```
-  const headersObj = {
-    headers: { authorization: token },
-    body: {
-      user_id: 1,
-      name: "General"
-    }
-  };
-
-  axios.delete(`https://pintereach.herokuapp.com/users/articles/${1}`, headersObj)
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(err => console.log(err));
-  ```
-
-  - Example: Received
-
-  ```
-  [
-    {
-        "id": 1
-    }
-  ]
-  ```
-
 - [x] Post `/users/articles` Requires AUTHORIZATION
 
 - Explanation: add article to your user board
-- Rule: Can only post articles on your own user boards... not other use boards (this includes admins)
+- Rule: Can only add articles on your own user boards... not other use boards (this includes admins)
 
   - Example1: Send
 
   ```
   const headersObj = {
     headers: { authorization: token },
-    body: {
-      "cover_page": "https://coverpage1.com/", // optional, requires at least 1
-      "title": "Hello World", // optional, requires at least 1
-      "link": "https://helloworld.com/", // optional, requires at least 1
-      "category_ids": [ 1, 3 ] // optional
+    data: {
+      cover_page: "https://coverpage1.com/", // optional, requires at least 1
+      title: "Hello World", // optional, requires at least 1
+      link: "https://helloworld.com/", // optional, requires at least 1
+      category_ids: [ 1, 3 ] // optional
     }
   };
 
-  axios.post(`https://pintereach.herokuapp.com/users/${1}/articles`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+  axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example2: Send
@@ -326,18 +298,17 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   const headersObj = {
     headers: { authorization: token },
-    body: {
-      "cover_page": "",
+    data: {
       "title": "Deadlines — Bad reason for bad code.",
       "link": "https://medium.com/mindorks/deadlines-bad-reason-for-bad-code-d3d5fe22f3ff"
     }
   };
 
   axios.post(`https://pintereach.herokuapp.com/users/articles`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example: Receive
@@ -350,30 +321,62 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-* [x] PUT `/users/:id` Requires AUTHORIZATION
+- [x] Post `/users/:id/categories` Requires AUTHORIZATION and AUTHENTICATION
 
-* Explanation: edit a user key/value pairs (including password)
-* Note: Only SAME USER or ADMIN can change the user attributes (not other users)
-* Note2: DO NOT include `is_admin` property in the `headersObj`, or it will set it to false.
+- Explanation: Creates a category
+- Rule: `user_id` must match the user `:id` in the axios url
+
+  - Example: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    data: {
+      user_id: 1,
+      name: "New Category"
+    }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/users/${1}/categories`, headersObj)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - Example: Received
+
+  ```
+  [
+    {
+        "id": 4
+    }
+  ]
+  ```
+
+- [x] PUT `/users/:id` Requires AUTHORIZATION and AUTHENTICATION
+
+- Explanation: edit any user key/value pairs (including password)
+- Note: Only SAME USER or ADMIN can change the user attributes (not other users)
+- Note2: DO NOT include `is_admin` property in the `headersObj`, or it will set it to false.
 
   - Example1: Send
 
   ```
   const headersObj = {
   headers: { authorization: token },
-  body: {
-  username: "catperson", // required (username cannot be changed)
-  // Note: If changing the password, you must provide both the old and new   password
-  oldpassword: "cats1", // optional
-  newpassword: "$his1sMuchBtter643" // optional
-  }
+  data: {
+      username: "catperson", // required (username cannot be changed)
+      password: "$his1sMuchBetter#$%", // optional (new password)
+      email: "kittycat@email.com" // optional
+    }
   };
 
-  axios.put(`https://pintereach.herokuapp.com/users/${2}/articles`, headersObj)
-  .then(response => {
-  console.log(response.data)
-  })
-  .catch(err => console.log(err));
+  axios.put(`https://pintereach.herokuapp.com/users/${2}`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example2: Send
@@ -381,17 +384,18 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   const headersObj = {
   headers: { authorization: token },
-  body: {
-  username: "catperson",
-  email: "kitty@email.com"
-  }
+  data: {
+      username: "catperson", // required (username cannot be changed)
+      email: "kittycat@email.com", // optional
+      img_url: "https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pethealthnetwork.com%2Fsites%2Fdefault%2Ffiles%2Fcontent%2Fimages%2Fhow-tell-if-your-cats-secretly-sick-fb-179022698.jpg&f=1"
+    }
   };
 
-  axios.put(`https://pintereach.herokuapp.com/users`, headersObj)
-  .then(response => {
-  console.log(response.data)
-  })
-  .catch(err => console.log(err));
+  axios.put(`https://pintereach.herokuapp.com/users/${2}`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - example: Receive
@@ -411,35 +415,69 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
 - Explanation: edits the article that belongs to the user
 - Rule: You must be the owner of the article or an admin to edit it
+- Rule2: If you provide the categories array, you must ALSO provide the category_id's that were already stored in the backend IF YOU WANT TO KEEP THEM. (examples: `current -> changes -> result... ([1, 3] -> [2] -> [2]) || ([1,3] -> [1,2,3] -> [1,2,3])`)
 
-  - Example: Send
+  - Example1: Send
 
   ```
   const headersObj = {
     headers: { authorization: token },
     data: {
-      cover_page: "Test2",
-      title: "Test2",
-      link: "Test2",
-      category_ids: [1, 3]
+      cover_page: "Test", // Optional (at least 1)
+      title: "Test", // Optional (at least 1)
+      link: "Test", // Optional (at least 1)
+      category_ids: [1, 3] // Optional
     }
   };
 
   axios.delete(`https://pintereach.herokuapp.com/users/${UserID}/articles/${ArticleID}`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
-  - Example: Receive
+  - Example2: Send
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    data: {
+      cover_page: "Testing", // Optional (at least 1)
+      title: "Testing", // Optional (at least 1)
+      link: "Testing", // Optional (at least 1)
+    }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/users/${UserID}/articles/${ArticleID}`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  - Example1: Receive
 
   ```
   [
     {
-        "articlesChanged": 1,
-        "categoriesChange": 2,
-        "message": "Article/Categories with id '10' was successfully changed"
+      "numOfarticlesChanged": 1,
+      "numOfCategoriesRemoved": 2,
+      "numOfcategoriesAdded": 2,
+      "message": "Article/Categories with id '10' was successfully changed"
+    }
+  ]
+  ```
+
+  - Example2: Receive
+
+  ```
+  [
+    {
+      "numOfarticlesChanged": 1,
+      "numOfCategoriesRemoved": 0,
+      "numOfcategoriesAdded": 0,
+      "message": "Article/Categories with id '10' was successfully changed"
     }
   ]
   ```
@@ -455,15 +493,15 @@ As a researcher, it's difficult to keep track of articles you want to read later
   const headersObj = {
     headers: { authorization: token },
     data: {
-      password: "\$his1sMuchBtter643" // required
+      password: "$his1sMuchBtter643" // required
     }
   };
 
-  axios.delete(`https://pintereach.herokuapp.com/users`, headersObj)
-  .then(response => {
-  console.log(response.data)
-  })
-  .catch(err => console.log(err));
+  axios.delete(`https://pintereach.herokuapp.com/users/${2}`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - example: Receive
@@ -477,10 +515,10 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-* [x] DELETE `/users/:userid/articles/:id'` Requires AUTHORIZATION
+- [x] DELETE `/users/:userid/articles/:id'` Requires AUTHORIZATION
 
-* Explanation: remove a single article from the user board
-* Note: Can only delete an article belonging to your own user account (unless you are admin)
+- Explanation: remove a single article from the user board
+- Note: Can only delete an article belonging to your own user account (unless you are admin)
 
   - Example: Send
 
@@ -491,7 +529,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   axios.delete(`https://pintereach.herokuapp.com/users/${userId}/articles/${articleId}`, headersObj)
   .then(response => {
-  console.log(response.data)
+    console.log(response.data)
   })
   .catch(err => console.log(err));
   ```
@@ -500,21 +538,72 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   [
-      {
-          "articlesDeleted": 1,
-          "message": "Article was successfully removed"
-      }
+    {
+      "articlesDeleted": 1,
+      "message": "Article was successfully removed"
+    }
   ]
   ```
 
 > Categories <a name="CategoriesEnd"></a>
 
 - [x] GET `/categories` Requires AUTHORIZATION
+- Explanation: Returns the names of all the articles
+
+  - Example: Send
+
+  ```
+  const headersObj = {
+  headers: { authorization: token }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/categories`, headersObj)
+  .then(response => {
+    console.log(response.data)
+  })
+  .catch(err => console.log(err));
+  ```
+
+  - Example: Received
+
+  ```
+  [
+    {
+        "name": "General"
+    },
+    {
+        "name": "Lambda Times"
+    },
+    {
+        "name": "Other"
+    }
+  ]
+  ```
 
 - [x] GET `/categories/:id` Requires AUTHORIZATION
+- Explanation: Returns the category details
+- Rule: The user_id is only returned if the user is an admin.
 
-- [x] PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
-- Rule: Only admins can edit categories
+  - Example: Send
+
+  ```
+  will fill in later...
+  ```
+
+  - Example1: Recieve
+
+  ```
+  Will fill in later...
+  ```
+
+  - Example2: Recieve
+
+  ```
+  Will fill in later...
+  ```
+
+* [x] PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+* Rule: Only admins can edit categories
 
   - Example: Send
 
@@ -528,7 +617,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   axios.delete(`https://pintereach.herokuapp.com/categories/${id}`, headersObj)
   .then(response => {
-  console.log(response.data)
+    console.log(response.data)
   })
   .catch(err => console.log(err));
   ```
@@ -544,8 +633,8 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ]
   ```
 
-- [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
-- Rule: Only admins can delete categories
+* [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+* Rule: Only admins can delete categories
 
   - Example: Send
 
@@ -556,7 +645,7 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   axios.delete(`https://pintereach.herokuapp.com/categories/${:id}`, headersObj)
   .then(response => {
-  console.log(response.data)
+    console.log(response.data)
   })
   .catch(err => console.log(err));
   ```

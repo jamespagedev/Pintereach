@@ -31,7 +31,7 @@ server.use('/auth', authRouter);
 server.use('/users', usersRouter);
 server.use('/categories', categoriesRouter);
 
-server.use(errorHandler);
+server.use(errorHandler); // This line needs to be after all routes
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************
