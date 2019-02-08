@@ -3,7 +3,7 @@
  **************************************************************************************************/
 require('dotenv').config();
 const express = require('express');
-const db = require('../../data/helpers/dbAuthHelper.js');
+const db = require('../../data/helpers/dbAuthHelpers.js');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -23,7 +23,7 @@ function generateToken(id, username, isAdmin) {
     'Should configure local .env file for secretString'; // hard coding this in the code is bad practice
 
   const options = {
-    expiresIn: 60 // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
+    expiresIn: '24h' // 60 seconds... otherValues(20, '2 days', '10h', '7d'), a number represents seconds (not milliseconds)
   };
 
   return jwt.sign(payload, secret, options);
@@ -38,8 +38,10 @@ router.post('/register', (req, res, next) => {
 
   // no trailing spaces for unique properties
   newUserCreds.username = newUserCreds.username.trim();
-  newUserCreds.display_name = newUserCreds.username.trim();
-  newUserCreds.email = newUserCreds.username.trim();
+  req.body.display_name
+    ? (newUserCreds.display_name = newUserCreds.display_name.trim())
+    : (newUserCreds.display_name = newUserCreds.username.trim());
+  if (req.body.email) newUserCreds.email = newUserCreds.email.trim();
 
   // only the database administrator can set this this value
   if (newUserCreds.is_admin) {
@@ -88,7 +90,7 @@ router.post('/login', (req, res, next) => {
       // the client password matches the db hash password
       if (user && bcrypt.compareSync(userCreds.password, user.password)) {
         const token = generateToken(user.id, user.username, user.is_admin);
-        res.status(200).json({ message: 'Logged in', token });
+        res.status(201).json({ id: user.id, token });
       } else {
         next({ code: 401 });
       }

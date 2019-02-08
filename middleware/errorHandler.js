@@ -12,6 +12,13 @@ const errorHandler = (err, req, res, next) => {
         message: 'You are unathorized to view the content.'
       });
 
+    case 403:
+      return res.status(403).json({
+        error: 403,
+        message:
+          "Forbidden: You don't have permission to access the endpoint on this server"
+      });
+
     case 404:
       return res.status(404).json({
         error: 404,

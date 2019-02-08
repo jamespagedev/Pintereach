@@ -31,6 +31,18 @@ function authenticate(req, res, next) {
   }
 }
 
+async function isAdmin(req, res, next) {
+  try {
+    if (req.decodedToken.is_admin) {
+      next();
+    } else {
+      next({ code: 403 });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
 /***************************************************************************************************
  ********************************************* Endpoints *******************************************
  **************************************************************************************************/
@@ -52,6 +64,60 @@ router.get('/:id', authenticate, async (req, res, next) => {
     res.status(200).send(category);
   } catch (err) {
     next(err);
+  }
+});
+
+router.put('/:id', authenticate, isAdmin, async (req, res, next) => {
+  const changes = req.body;
+  try {
+    changes.id = Number(req.params.id);
+    req.body.name
+      ? (changes.name = req.body.name.trim())
+      : function() {
+          throw { code: 400 };
+        };
+    const count = await db.updateCategory(changes.id, changes);
+    res.status(200).json([
+      {
+        categoriesChange: count,
+        message: `Category name '${changes.name}' with id '${
+          changes.id
+        }' was successfully changed`
+      }
+    ]);
+  } catch (err) {
+    if (err.errno === 19) {
+      res.status(400).json({
+        error: 400,
+        message: `Category name '${changes.name}' already taken`
+      });
+    } else {
+      next(err);
+    }
+  }
+});
+
+// Delete Category
+router.delete('/:id', authenticate, isAdmin, async (req, res, next) => {
+  try {
+    const count = await db.deleteCategory(req.params.id);
+    if (count > 0) {
+      res.status(202).json([
+        {
+          categoriesDeleted: count,
+          message: 'Category was successfully removed'
+        }
+      ]);
+    } else {
+      res.status(404).json([
+        {
+          error: 404,
+          message: `The category with id ${req.params.id} was not found`
+        }
+      ]);
+    }
+  } catch (err) {
+    next(500);
   }
 });
 

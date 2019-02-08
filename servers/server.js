@@ -26,14 +26,12 @@ server.get('/', (req, res) => {
 const authRouter = require('./routes/authRouter.js');
 const usersRouter = require('./routes/usersRouter.js');
 const categoriesRouter = require('./routes/categoriesRouter.js');
-// const articlesRouter = require('./routes/articlesRouter.js');
 
 server.use('/auth', authRouter);
 server.use('/users', usersRouter);
 server.use('/categories', categoriesRouter);
-// server.use('/articles', articlesRouter);
 
-server.use(errorHandler);
+server.use(errorHandler); // This line needs to be after all routes
 
 /***************************************************************************************************
  ********************************************* export(s) *******************************************
