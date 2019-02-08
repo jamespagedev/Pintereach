@@ -5,12 +5,21 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const server = express();
+const path = require('path');
+const fs = require('fs');
+const showdown = require('showdown');
 const { errorHandler } = require('../middleware/errorHandler.js');
+
+const server = express();
 
 /***************************************************************************************************
  ******************************************** middleware *******************************************
  **************************************************************************************************/
+// Make README.md the home page
+const converter = new showdown.Converter({ tables: true });
+const text = fs.readFileSync('../README.md', 'utf8');
+converter.makeHtml(text);
+
 server.use(helmet()); // hides your tech stack from sniffers
 server.use(express.json()); // built-in
 server.use(morgan('short')); // logging middleware
@@ -20,7 +29,7 @@ server.use(cors()); // allows domains/ports to connect to your server
  ********************************************** routes *********************************************
  **************************************************************************************************/
 server.get('/', (req, res) => {
-  res.send(`Main Server Running...`);
+  res.sendFile(path.join(__dirname + '../public/docs.html'));
 });
 
 const authRouter = require('./routes/authRouter.js');
