@@ -5,8 +5,9 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const server = express();
 const { errorHandler } = require('../middleware/errorHandler.js');
+
+const server = express();
 
 /***************************************************************************************************
  ******************************************** middleware *******************************************
@@ -20,7 +21,7 @@ server.use(cors()); // allows domains/ports to connect to your server
  ********************************************** routes *********************************************
  **************************************************************************************************/
 server.get('/', (req, res) => {
-  res.send(`Main Server Running...`);
+  res.sendFile('docs.html', { root: './public' }); // Make README.md the home page
 });
 
 const authRouter = require('./routes/authRouter.js');
