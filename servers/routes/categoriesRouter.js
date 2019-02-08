@@ -67,7 +67,7 @@ router.get('/:id', authenticate, async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authenticate, isAdmin, async (req, res, next) => {
   const changes = req.body;
   try {
     changes.id = Number(req.params.id);

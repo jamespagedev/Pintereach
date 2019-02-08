@@ -364,8 +364,8 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   const headersObj = {
-  headers: { authorization: token },
-  data: {
+    headers: { authorization: token },
+    data: {
       username: "catperson", // required (username cannot be changed)
       password: "$his1sMuchBetter#$%", // optional (new password)
       email: "kittycat@email.com" // optional
@@ -383,11 +383,11 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   const headersObj = {
-  headers: { authorization: token },
-  data: {
-      username: "catperson", // required (username cannot be changed)
-      email: "kittycat@email.com", // optional
-      img_url: "https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pethealthnetwork.com%2Fsites%2Fdefault%2Ffiles%2Fcontent%2Fimages%2Fhow-tell-if-your-cats-secretly-sick-fb-179022698.jpg&f=1"
+    headers: { authorization: token },
+    data: {
+        username: "catperson", // required (username cannot be changed)
+        email: "kittycat@email.com", // optional
+        img_url: "https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pethealthnetwork.com%2Fsites%2Fdefault%2Ffiles%2Fcontent%2Fimages%2Fhow-tell-if-your-cats-secretly-sick-fb-179022698.jpg&f=1"
     }
   };
 
@@ -524,14 +524,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   const headersObj = {
-  headers: { authorization: token }
+    headers: { authorization: token }
   };
 
   axios.delete(`https://pintereach.herokuapp.com/users/${userId}/articles/${articleId}`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - example: Receive
@@ -554,14 +554,14 @@ As a researcher, it's difficult to keep track of articles you want to read later
 
   ```
   const headersObj = {
-  headers: { authorization: token }
+    headers: { authorization: token }
   };
 
   axios.delete(`https://pintereach.herokuapp.com/categories`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example: Received
@@ -587,39 +587,74 @@ As a researcher, it's difficult to keep track of articles you want to read later
   - Example: Send
 
   ```
-  will fill in later...
+  const headersObj = {
+    headers: { authorization: token }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/categories/2`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example1: Recieve
 
   ```
-  Will fill in later...
+  [
+    {
+      "id": 2,
+      "user_id": 2,
+      "name": "Lambda Times"
+    }
+  ]
   ```
 
   - Example2: Recieve
 
   ```
-  Will fill in later...
+  [
+    {
+      "id": 2,
+      "name": "Lambda Times"
+    }
+  ]
   ```
 
-* [x] PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
-* Rule: Only admins can edit categories
+- [x] PUT `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+- Explanation - removes categories and the relationships they have to articles on user boards
+- Rule: Only admins can edit categories
 
   - Example: Send
 
   ```
   const headersObj = {
-  headers: { authorization: token },
-  data: {
-    "name": "Change name here"
-  }
+    headers: { authorization: token },
+    data: {
+      "name": "Change name here"
+    }
+  };
+
+  axios.delete(`https://pintereach.herokuapp.com/categories/2`, headersObj)
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
+  ```
+
+  ```
+  const headersObj = {
+    headers: { authorization: token },
+    data: {
+      "name": "Change name here"
+    }
   };
 
   axios.delete(`https://pintereach.herokuapp.com/categories/${id}`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example: Receive
@@ -627,27 +662,28 @@ As a researcher, it's difficult to keep track of articles you want to read later
   ```
   [
     {
-        "categoriesChange": 1,
-        "message": "Category name 'Change name here' with id '3' was successfully changed"
+      "categoriesChange": 1,
+      "message": "Category name 'Change name here' with id '3' was successfully changed"
     }
   ]
   ```
 
-* [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
-* Rule: Only admins can delete categories
+- [x] DELETE `/categories/:id` Requires AUTHORIZATION and AUTHENTICATION
+- Explanation - removes categories and the relationships they have to articles on user boards
+- Rule: Only admins can delete categories (since they are shared accross user boards)
 
   - Example: Send
 
   ```
   const headersObj = {
-  headers: { authorization: token }
+    headers: { authorization: token }
   };
 
   axios.delete(`https://pintereach.herokuapp.com/categories/${:id}`, headersObj)
-  .then(response => {
-    console.log(response.data)
-  })
-  .catch(err => console.log(err));
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(err => console.log(err));
   ```
 
   - Example: Receive
@@ -754,7 +790,3 @@ https://docs.google.com/spreadsheets/d/1sFgvt8HtqNCw32YC8Wvrgrdb61oEWPTsBUrvOL3r
 1. Any secrets like API keys and hashing secrets are hard-coded in the source code
 2. Secrets are extracted out into environment variables using .env files that most be manually changed when deploying.
 3. [x] The project is configured to dinamically load the appropriate secrets based on the environment it's running on.
-
-```
-
-```
