@@ -16,7 +16,7 @@ const server = express();
  ******************************************** middleware *******************************************
  **************************************************************************************************/
 // Make README.md the home page
-const md = fs.readFileSync('../README.md', 'utf8');
+const md = fs.readFileSync('./README.md', 'utf8');
 const converter = new showdown.Converter({ tables: true });
 const text = md;
 converter.makeHtml(text);
