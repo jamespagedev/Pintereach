@@ -5,9 +5,9 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
-const showdown = require('showdown');
+// const path = require('path');
+// const fs = require('fs');
+// const showdown = require('showdown');
 const { errorHandler } = require('../middleware/errorHandler.js');
 
 const server = express();
@@ -16,22 +16,22 @@ const server = express();
  ******************************************** middleware *******************************************
  **************************************************************************************************/
 // Make README.md the home page
-const md = fs.readFileSync('./README.md', 'utf8');
-const converter = new showdown.Converter({ tables: true });
-const text = md;
-converter.makeHtml(text);
+// const md = fs.readFileSync('./README.md', 'utf8');
+// const converter = new showdown.Converter({ tables: true });
+// const text = md;
+// converter.makeHtml(text);
 
 server.use(helmet()); // hides your tech stack from sniffers
 server.use(express.json()); // built-in
 server.use(morgan('short')); // logging middleware
 server.use(cors()); // allows domains/ports to connect to your server
-app.use(express.static('public')); // creates the html file in /public/docs.html
+// app.use(express.static('public')); // creates the html file in /public/docs.html
 
 /***************************************************************************************************
  ********************************************** routes *********************************************
  **************************************************************************************************/
 server.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/doc.html'));
+  res.status(200).send('server is running...');
 });
 
 const authRouter = require('./routes/authRouter.js');
