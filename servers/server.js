@@ -31,7 +31,7 @@ app.use(express.static('public')); // creates the html file in /public/docs.html
  ********************************************** routes *********************************************
  **************************************************************************************************/
 server.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/docs.html'));
+  res.sendFile(path.join(__dirname + '/public/doc.html'));
 });
 
 const authRouter = require('./routes/authRouter.js');
