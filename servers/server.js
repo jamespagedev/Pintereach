@@ -25,6 +25,7 @@ server.use(helmet()); // hides your tech stack from sniffers
 server.use(express.json()); // built-in
 server.use(morgan('short')); // logging middleware
 server.use(cors()); // allows domains/ports to connect to your server
+app.use(express.static('public')); // creates the html file in /public/docs.html
 
 /***************************************************************************************************
  ********************************************** routes *********************************************
